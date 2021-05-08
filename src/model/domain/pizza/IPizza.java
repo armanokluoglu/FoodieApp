@@ -1,5 +1,6 @@
 package model.domain.pizza;
 
-public interface IPizza {
-	String decorate();
+import model.domain.Food;
+
+public interface IPizza extends Food {
 }
