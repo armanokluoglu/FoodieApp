@@ -9,7 +9,7 @@ import model.domain.pizza.pizzas.NeapolitanPizza;
 import model.domain.pizza.pizzas.NewYorkStylePizza;
 import model.domain.pizza.pizzas.SicilianPizza;
 
-public class PizzaFactory implements FoodFactory<IPizza> {
+public class PizzaFactory implements FoodFactory {
 
 	@Override
 	public IPizza create(String type, List<String> toppings) {

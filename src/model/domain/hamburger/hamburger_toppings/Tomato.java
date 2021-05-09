@@ -5,14 +5,23 @@ import model.domain.hamburger.IHamburger;
 
 public class Tomato  extends HamburgerDecorator {
 
+	private final double cost = 0.4;
+	
     public Tomato(IHamburger hamburger) {
         super(hamburger);
     }
+
+    private String decorateWithTomato() {
+        return " + Tomato";
+    }
+    
+    @Override
     public String decorate() {
         return super.decorate() + decorateWithTomato();
     }
-
-    private String decorateWithTomato() {
-        return " with Tomato";
-    }
+    
+    @Override
+    public double getCost() {
+		return super.getCost() + cost;
+	}
 }

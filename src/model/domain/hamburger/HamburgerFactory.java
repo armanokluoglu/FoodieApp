@@ -9,7 +9,7 @@ import model.domain.hamburger.hamburgers.VeggieBurger;
 
 import java.util.List;
 
-public class HamburgerFactory implements FoodFactory<IHamburger> {
+public class HamburgerFactory implements FoodFactory {
 
     @Override
     public IHamburger create(String type, List<String> toppings) {
@@ -33,8 +33,8 @@ public class HamburgerFactory implements FoodFactory<IHamburger> {
             else if (string.equalsIgnoreCase("cheese")) {
                 hamburger = new Cheese(hamburger);
             }
-            else if (string.equalsIgnoreCase("cucumber")) {
-                hamburger = new Cucumber(hamburger);
+            else if (string.equalsIgnoreCase("pickles")) {
+                hamburger = new Pickles(hamburger);
             }
             else if (string.equalsIgnoreCase("lettuce")) {
                 hamburger = new Lettuce(hamburger);

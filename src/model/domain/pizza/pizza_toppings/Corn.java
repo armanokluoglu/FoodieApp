@@ -5,15 +5,23 @@ import model.domain.pizza.PizzaDecorator;
 
 public class Corn extends PizzaDecorator {
 
+	private final double cost = 0.5;
+	
     public Corn(IPizza pizza) {
         super(pizza);
     }
 
+    private String decorateWithCorn() {
+        return " + Corn";
+    }
+    
+    @Override
     public String decorate() {
         return super.decorate() + decorateWithCorn();
     }
-
-    private String decorateWithCorn() {
-        return " with Corn";
-    }
+    
+    @Override
+    public double getCost() {
+		return super.getCost() + cost;
+	}
 }

@@ -1,6 +1,6 @@
 package model.domain.pizza;
 
-import model.domain.Food;
+import model.domain.IFood;
 
-public interface IPizza extends Food {
+public interface IPizza extends IFood {
 }

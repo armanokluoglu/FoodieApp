@@ -5,13 +5,13 @@ import model.domain.pizza.PizzaFactory;
 
 public class FactoryProvider {
 	
-	public static <T extends Food> FoodFactory<T> getFactory(String choice){
+	public static FoodFactory getFactory(String choice){
         
         if(choice.equalsIgnoreCase("pizza")) {
-            return (FoodFactory<T>) new PizzaFactory();
+            return (FoodFactory) new PizzaFactory();
         }
         else if(choice.equalsIgnoreCase("hamburger")) {
-            return (FoodFactory<T>) new HamburgerFactory();
+            return (FoodFactory) new HamburgerFactory();
         }
         return null;
     }

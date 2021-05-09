@@ -2,7 +2,7 @@ package model.domain;
 
 import java.util.List;
 
-public interface FoodFactory<T extends Food> {
+public interface FoodFactory {
 
-	public T create(String type, List<String> toppings);
+	public IFood create(String type, List<String> toppings);
 }
