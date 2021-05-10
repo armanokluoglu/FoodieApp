@@ -1,17 +1,23 @@
 package model.domain;
 
+import model.utilities.FoodCostPair;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class Order {
-	private List<IFood> items;
+	private static int idCounter = 1;
+	private int id;
+	private List<FoodCostPair> items;
 	private String address;
 	private String customerName;
 	private String restaurantName;
 	private Date orderDate;
 
 	public Order() {
+		id=idCounter;
+		idCounter++;
 		this.items = new ArrayList<>();
 		this.address = null;
 		this.customerName = null;
@@ -20,6 +26,8 @@ public class Order {
 	}
 	
 	public Order(String address, String customerName, String restaurantName) {
+		id=idCounter;
+		idCounter++;
 		this.items = new ArrayList<>();
 		this.address = address;
 		this.customerName = customerName;
@@ -27,23 +35,40 @@ public class Order {
 		this.orderDate = null;
 	}
 	
-	public Order(String address, String customerName, String restaurantName, List<IFood> items, Date orderDate) {
+	public Order(String address, String customerName, String restaurantName, List<FoodCostPair> items, Date orderDate) {
+		id=idCounter;
+		idCounter++;
 		this.items = items;
 		this.address = address;
 		this.customerName = customerName;
 		this.restaurantName = restaurantName;
 		this.orderDate = orderDate;
 	}
+	public Order(int id, String address, String customerName, String restaurantName, List<FoodCostPair> items, Date orderDate) {
+		this.id=id;
+		this.items = items;
+		this.address = address;
+		this.customerName = customerName;
+		this.restaurantName = restaurantName;
+		this.orderDate = orderDate;
+	}
+	public int getId() {
+		return id;
+	}
 
-	public List<IFood> getItems() {
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public List<FoodCostPair> getItems() {
 		return items;
 	}
 
-	public void setItems(List<IFood> items) {
+	public void setItems(List<FoodCostPair> items) {
 		this.items = items;
 	}
 	
-	public void addItemToOrder(IFood item) {
+	public void addItemToOrder(FoodCostPair item) {
 		items.add(item);
 	}
 	

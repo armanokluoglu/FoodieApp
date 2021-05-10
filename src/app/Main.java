@@ -1,9 +1,11 @@
 package app;
 
-import java.util.Arrays;
-import model.domain.FactoryProvider;
-import model.domain.IFood;
-import model.domain.FoodFactory;
+import java.lang.reflect.Array;
+import java.util.*;
+
+import data_access.IO;
+import model.domain.*;
+import model.utilities.FoodCostPair;
 
 public class Main {
 	public static void main(String[] args) {
@@ -16,6 +18,47 @@ public class Main {
 
 		IFood hamburger1 = (IFood) factory1.create("bigmac", Arrays.asList("mayonnaise","cheese","pickles","lettuce","onion","tomato"));
 		IFood hamburger2 = (IFood) factory1.create("turkey", Arrays.asList("mayonnaise","cheese","pickles","lettuce","onion","tomato"));
+
+		FoodCostPair pizza1P = new FoodCostPair(pizza1);
+		FoodCostPair pizza2P = new FoodCostPair(pizza2);
+		FoodCostPair pizza3P = new FoodCostPair(pizza3);
+		FoodCostPair hamburger1P = new FoodCostPair(hamburger1);
+		FoodCostPair hamburger2P = new FoodCostPair(hamburger2);
+
+
+		Map<String, List<String>> pizzaMenu1 = new HashMap<>();
+		Map<String, List<String>> burgerMenu1 = new HashMap<>();
+
+		pizzaMenu1.put("neapolitan",Arrays.asList("pepperoni","mozzarella","mushroom","olive","corn"));
+		pizzaMenu1.put("californian", Arrays.asList("pepperoni","mozzarella","mushroom","olive","corn"));
+		burgerMenu1.put("bigmac", Arrays.asList("mayonnaise","cheese","pickles","lettuce","onion","tomato"));
+		burgerMenu1.put("turkey", Arrays.asList("mayonnaise","cheese","pickles","lettuce","onion","tomato"));
+
+		Menu menu1 = new Menu("Pizza Menu",pizzaMenu1);
+		Menu menu2 = new Menu("Burger Menu",burgerMenu1);
+
+		User restaurant = new Restaurant("Calipso","calipso","1234","gülbahçe",new ArrayList<>(), Arrays.asList(menu1,menu2));
+		User restaurant2 = new Restaurant("Calipso2","calipso2","1234","gülbahçe",new ArrayList<>(), Arrays.asList(menu1));
+
+		Order order = new Order("adress","customer1","calipso",Arrays.asList(hamburger1P,pizza1P),new Date());
+		Order order2 = new Order("adress","customer2","calipso",Arrays.asList(hamburger2P,pizza1P),new Date());
+		Order order3 = new Order("adress","customer3","calipso",Arrays.asList(hamburger1P,pizza2P),new Date());
+		Order order4 = new Order("adress","customer4","calipso",Arrays.asList(hamburger1P,pizza2P,pizza1P),new Date());
+		Order order5 = new Order("adress","customer5","calipso",Arrays.asList(hamburger2P,pizza3P),new Date());
+
+		restaurant.addOrder(order);
+		restaurant.addOrder(order2);
+		restaurant.addOrder(order3);
+		restaurant.addOrder(order4);
+		restaurant.addOrder(order5);
+
+		List<User> restaurants = new ArrayList<>();
+		restaurants.add(restaurant);
+		restaurants.add(restaurant2);
+
+		IO io = new IO();
+		io.outputUsers(restaurants);
+		io.inputUsers();
 
 		System.out.println(pizza1.decorate());
 		System.out.println(pizza1.getCost());

@@ -1,5 +1,7 @@
 package model.domain;
 
+import model.utilities.FoodCostPair;
+
 import java.util.List;
 
 public class Customer extends User {
@@ -19,7 +21,7 @@ public class Customer extends User {
 	}
 	
 	public void addItemToOrder(IFood food) {
-		currentOrder.addItemToOrder(food);
+		currentOrder.addItemToOrder(new FoodCostPair(food));
 	}
 	
 	public void removeItemFromOrder(IFood food) {

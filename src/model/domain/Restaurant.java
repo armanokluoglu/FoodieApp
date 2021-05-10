@@ -10,6 +10,10 @@ public class Restaurant extends User {
 		super(name, username, password, address, orderHistory);
 		this.menu = menu;
 	}
+	public Restaurant(int id,String name, String username, String password, String address, List<Order> orderHistory, List<Menu> menu) {
+		super(id, name, username, password, address, orderHistory);
+		this.menu = menu;
+	}
 
 	public List<Menu> getMenu() {
 		return menu;
