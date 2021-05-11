@@ -1,7 +1,6 @@
 package model.domain;
 
 import model.utilities.FoodCostPair;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -73,7 +72,11 @@ public class Order {
 	}
 	
 	public void removeItemFromOrder(IFood item) {
-		items.remove(item);
+		for (FoodCostPair foodCostPair : items) {
+			if(foodCostPair.getFood() == item.decorate()) {
+				items.remove(foodCostPair);
+			}
+		}
 	}
 
 	public String getAddress() {
@@ -98,5 +101,13 @@ public class Order {
 
 	public Date getOrderDate() {
 		return orderDate;
+	}
+
+	public double getOrderTotal() {
+		double total = 0;
+		for (FoodCostPair foodCostPair : items) {
+			total += foodCostPair.getCost();
+		}
+		return Double.parseDouble(String.format("%.2f", total));
 	}
 }
