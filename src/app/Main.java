@@ -1,9 +1,8 @@
 package app;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
-import data_access.IO;
+import model.data_access.InputOutput;
 import model.domain.*;
 import model.utilities.FoodCostPair;
 
@@ -39,6 +38,8 @@ public class Main {
 
 		User restaurant = new Restaurant("Calipso","calipso","1234","gülbahçe",new ArrayList<>(), Arrays.asList(menu1,menu2));
 		User restaurant2 = new Restaurant("Calipso2","calipso2","1234","gülbahçe",new ArrayList<>(), Arrays.asList(menu1));
+		User customer = new Customer("customer","3535","1234","gülbahçe2",new ArrayList<>());
+		User customer2 = new Customer("customer2","3535","1234","gülbahçe23",new ArrayList<>());
 
 		Order order = new Order("adress","customer1","calipso",Arrays.asList(hamburger1P,pizza1P),new Date());
 		Order order2 = new Order("adress","customer2","calipso",Arrays.asList(hamburger2P,pizza1P),new Date());
@@ -52,12 +53,22 @@ public class Main {
 		restaurant.addOrder(order4);
 		restaurant.addOrder(order5);
 
-		List<User> restaurants = new ArrayList<>();
-		restaurants.add(restaurant);
-		restaurants.add(restaurant2);
 
-		IO io = new IO();
-		io.outputUsers(restaurants);
+		customer.addOrder(order);
+		customer.addOrder(order2);
+		customer2.addOrder(order3);
+		customer2.addOrder(order4);
+		((Customer)customer2).initializeOrder("Calipso2");
+		((Customer)customer2).addItemToOrder(hamburger2);
+
+		List<User> users = new ArrayList<>();
+		users.add(restaurant);
+		users.add(restaurant2);
+		users.add(customer);
+		users.add(customer2);
+
+		InputOutput io = new InputOutput();
+		io.outputUsers(users);
 		io.inputUsers();
 
 		System.out.println(pizza1.decorate());

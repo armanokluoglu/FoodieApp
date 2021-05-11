@@ -1,6 +1,5 @@
-package data_access;
+package model.data_access;
 
-import com.sun.org.apache.xpath.internal.operations.Or;
 import model.domain.*;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -19,10 +18,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class IO {
+public class InputOutput {
 
 
-    public void outputUsers(List<User> restaurantList){
+    public void outputUsers(List<User> userList){
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder;
         try {
@@ -30,9 +29,11 @@ public class IO {
             Document doc = dBuilder.newDocument();
             Element rootElement = doc.createElementNS("CENG431", "Users");
             doc.appendChild(rootElement);
-            for (User user : restaurantList)
+            for (User user : userList)
                 if(user instanceof Restaurant)
                     rootElement.appendChild(IOParser.toRestaurantXMLNode((Restaurant) user,doc));
+                else if(user instanceof Customer)
+                    rootElement.appendChild(IOParser.toCustomerXMLNode((Customer) user,doc));
 
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
@@ -49,7 +50,6 @@ public class IO {
 
     public List<User> inputUsers(){
         List<User> users = new ArrayList<>();
-        List<User> restaurants = new ArrayList<>();
         try {
             File inputFile = new File("users.xml");
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -70,13 +70,26 @@ public class IO {
                     String userName = eElement.getElementsByTagName("UserName").item(0).getTextContent();
                     String password = eElement.getElementsByTagName("Password").item(0).getTextContent();
                     String address = eElement.getElementsByTagName("Address").item(0).getTextContent();
-                    Node menusNode = eElement.getElementsByTagName("Menus").item(0);
                     Node ordersNode = eElement.getElementsByTagName("Orders").item(0);
-
-                    List<Menu> menus = nodeToMenus(menusNode);
                     List<Order> orders = nodeToOrders(ordersNode);
-                    User restaurant = new Restaurant(id,name,userName,password,address,orders,menus);
-                    restaurants.add(restaurant);
+                    if(type.equalsIgnoreCase("restaurant")){
+                        Node menusNode = eElement.getElementsByTagName("Menus").item(0);
+
+                        List<Menu> menus = nodeToMenus(menusNode);
+                        User restaurant = new Restaurant(id,name,userName,password,address,orders,menus);
+                        users.add(restaurant);
+                    }
+                    else if(type.equalsIgnoreCase("customer")){
+                        Node currentOrderNode = eElement.getElementsByTagName("CurrentOrder").item(0);
+                        List<Order> currentOrderList = nodeToOrders(currentOrderNode);
+                        Order currentOrder = null;
+                        if(!currentOrderList.isEmpty())
+                            currentOrder = currentOrderList.get(0);
+                        User customer = new Customer(id,name,userName,password,address,orders);
+                        ((Customer)customer).setCurrentOrder(currentOrder);
+                        users.add(customer);
+                    }
+
 
                     nNode = nNode.getNextSibling().getNextSibling();
 
@@ -144,7 +157,9 @@ public class IO {
                 String restaurantName = eElement.getElementsByTagName("RestaurantName").item(0).getTextContent();
                 String address = eElement.getElementsByTagName("Address").item(0).getTextContent();
                 String dateStr = eElement.getElementsByTagName("Date").item(0).getTextContent();
-                Date date=dateFormat.parse(dateStr);
+                Date date = null;
+                if(!dateStr.equals("-"))
+                    date=dateFormat.parse(dateStr);
                 Node foodsNode = eElement.getElementsByTagName("Foods").item(0);
                 List<FoodCostPair> foodCostPairs = nodeToFoods(foodsNode);
                 Order order = new Order(id,address,customerName,restaurantName,foodCostPairs,date);

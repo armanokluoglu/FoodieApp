@@ -1,12 +1,10 @@
-package data_access;
+package model.data_access;
 
-import com.sun.org.apache.xpath.internal.operations.Or;
 import model.domain.*;
 import model.utilities.FoodCostPair;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -41,6 +39,30 @@ public class IOParser {
         userElem.appendChild(menuNode);
         return userElem;
     }
+    public static Node toCustomerXMLNode(Customer customer, Document doc) {
+        Element userElem = doc.createElement("User");
+        //userElem.setAttribute("id", String.valueOf(user.getId()));
+        userElem.setAttribute("id",String.valueOf(customer.getId()));
+        userElem.appendChild(getNodeElement(doc, "Type", "customer"));
+        userElem.appendChild(getNodeElement(doc, "Name", customer.getName()));
+        userElem.appendChild(getNodeElement(doc, "UserName", customer.getUsername()));
+        userElem.appendChild(getNodeElement(doc, "Password", customer.getPassword()));
+        userElem.appendChild(getNodeElement(doc, "Address", customer.getAddress()));
+        Element nodeCurrentOrder = doc.createElement("CurrentOrder");
+        if(customer.getCurrentOrder()!=null){
+            nodeCurrentOrder.appendChild(toOrderXML(customer.getCurrentOrder(),doc));
+        }
+        Element node = doc.createElement("Orders");
+        if(!customer.getOrderHistory().isEmpty()){
+            for(Order order:customer.getOrderHistory()){
+                node.appendChild(toOrderXML(order,doc));
+            }
+        }
+
+        userElem.appendChild(node);
+        userElem.appendChild(nodeCurrentOrder);
+        return userElem;
+    }
     private static Node getNodeElement(Document doc, String name, String value) {
         Element node = doc.createElement(name);
         node.appendChild(doc.createTextNode(value));
@@ -55,7 +77,10 @@ public class IOParser {
         orderElem.appendChild(getNodeElement(doc, "Address", order.getAddress()));
         DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
 
-        orderElem.appendChild(getNodeElement(doc, "Date", dateFormat.format(order.getOrderDate())));
+        if(order.getOrderDate()!=null)
+            orderElem.appendChild(getNodeElement(doc, "Date", dateFormat.format(order.getOrderDate())));
+        else
+            orderElem.appendChild(getNodeElement(doc, "Date","-"));
         Element node = doc.createElement("Foods");
         int foodId = 1;
         if(!order.getItems().isEmpty()){

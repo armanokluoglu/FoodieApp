@@ -11,11 +11,15 @@ public class Customer extends User {
 	public Customer(String name, String username, String password, String address, List<Order> orderHistory) {
 		super(name, username, password, address, orderHistory);
 	}
-
+	public Customer(int id, String name, String username, String password, String address, List<Order> orderHistory) {
+		super(id, name, username, password, address, orderHistory);
+	}
 	public void initializeOrder(String restaurantName) {
 		this.currentOrder = new Order(getAddress(), getName(), restaurantName);
 	}
-	
+	public void setCurrentOrder(Order order) {
+		this.currentOrder = order;
+	}
 	public Order getCurrentOrder() {
 		return currentOrder;
 	}
