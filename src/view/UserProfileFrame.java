@@ -129,7 +129,7 @@ public class UserProfileFrame extends JFrame implements Observer {
 		JButton changeAddressButton = new JButton("Change Address");
 		this.changeAddressButton = changeAddressButton;
 		
-		JLabel orderHistoryLabel = new JLabel("<html><FONT SIZE=5 COLOR=GREEN>Order History:</FONT></FONT></html>");
+		JLabel orderHistoryLabel = new JLabel("<html><FONT SIZE=5 COLOR=GREEN>ORDER HISTORY</FONT></html>");
 
 		List<Order> orders = user.getOrderHistory();
 

@@ -39,11 +39,11 @@ public class SessionManager {
 	}
 
 	public void restaurantPage(User restaurant) {
-		RestaurantFrame collectionView = new RestaurantFrame(fm, currentUser, restaurant);
-		RestaurantController collectionController = new RestaurantController(model, collectionView, this, restaurant);
+		RestaurantFrame restaurantView = new RestaurantFrame(fm, restaurant);
+		RestaurantController restaurantController = new RestaurantController(restaurantView, this, restaurant);
 	}
 
-	public void foodPage(IFood food) {
+	public void foodPage(String food, User restaurant) {
 		FoodFrame foodView = new FoodFrame(fm, food, currentUser);
 		FoodController foodController = new FoodController(model, foodView, this, food);
 	}

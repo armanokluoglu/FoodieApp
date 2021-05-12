@@ -9,8 +9,8 @@ public class FrameManager {
 
     public FrameManager() {
         this.frame = new JFrame();
-        frame = new JFrame("Outfit Rating MVC");
-        frame.setSize(800, 800);
+        frame = new JFrame("Foodie");
+        frame.setSize(1000, 800);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
     }
