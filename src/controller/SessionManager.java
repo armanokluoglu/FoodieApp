@@ -33,8 +33,10 @@ public class SessionManager {
 	}
 
 	public void restaurantProfilePage() {
-		//RestaurantProfileFrame restaurantProfileView = new RestaurantProfileFrame(model, fm, currentUser);
-		//RestaurantProfileController restaurantProfileController = new RestaurantProfileController(model, restaurantProfileView, this);
+		// RestaurantProfileFrame restaurantProfileView = new
+		// RestaurantProfileFrame(model, fm, currentUser);
+		// RestaurantProfileController restaurantProfileController = new
+		// RestaurantProfileController(model, restaurantProfileView, this);
 	}
 
 	public void restaurantPage(User restaurant) {
@@ -42,14 +44,15 @@ public class SessionManager {
 		RestaurantController restaurantController = new RestaurantController(restaurantView, this, restaurant);
 	}
 
-	public void foodPage(String food, List<String> toppings, User restaurant) {
-		FoodFrame foodView = new FoodFrame(fm, food,toppings,restaurant);
-		FoodController foodController = new FoodController(foodView, this,restaurant, food,toppings);
+	public void foodPage(String food, User restaurant) {
+		FoodFrame foodView = new FoodFrame(fm, food, restaurant);
+		FoodController foodController = new FoodController(foodView, this, restaurant, food);
 	}
 
 	public void shoppingCartPage() {
-		 ShoppingCartFrame shoppingCartView = new ShoppingCartFrame(fm, ((Customer)currentUser).getCurrentOrder());
-		 ShoppingCartController shoppingCartController = new ShoppingCartController(shoppingCartView, this,((Customer)currentUser).getCurrentOrder());
+		ShoppingCartFrame shoppingCartView = new ShoppingCartFrame(fm, ((Customer) currentUser).getCurrentOrder());
+		ShoppingCartController shoppingCartController = new ShoppingCartController(shoppingCartView, this,
+				((Customer) currentUser).getCurrentOrder());
 	}
 
 	public User getCurrentUser() {

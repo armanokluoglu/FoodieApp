@@ -40,7 +40,7 @@ public class RestaurantController implements Observer {
 		for (Menu submenu : menu) {
 			Map<String, List<String>> items = submenu.getItems();
 			for (String item : items.keySet()) {
-				view.addOpenFoodActionListener(new OpenFoodListener(item,items.get(item)), item);
+				view.addOpenFoodActionListener(new OpenFoodListener(item), item);
 			}
 		}
 	}
@@ -48,14 +48,13 @@ public class RestaurantController implements Observer {
 
 	class OpenFoodListener implements ActionListener {
 		public String foodName;
-		public List<String> toppings;
-		public OpenFoodListener(String foodName, List<String> toppings) {
+
+		public OpenFoodListener(String foodName) {
 			this.foodName = foodName;
-			this.toppings = toppings;
 		}
 		
 		public void actionPerformed(ActionEvent e) {
-			session.foodPage(foodName, toppings, (User) subject);
+			session.foodPage(foodName, (User) subject);
 		}
 	}
 
