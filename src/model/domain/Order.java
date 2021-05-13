@@ -3,10 +3,7 @@ package model.domain;
 import model.utilities.FoodCostPair;
 import model.utilities.Observer;
 import model.utilities.Subject;
-
 import java.io.Serializable;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

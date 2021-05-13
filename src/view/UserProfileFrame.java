@@ -8,6 +8,8 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -132,6 +134,12 @@ public class UserProfileFrame extends JFrame implements Observer {
 		JLabel orderHistoryLabel = new JLabel("<html><FONT SIZE=5 COLOR=GREEN>ORDER HISTORY</FONT></html>");
 
 		List<Order> orders = user.getOrderHistory();
+		Collections.sort(orders, new Comparator<Order>() {
+		    @Override
+		    public int compare(Order o1, Order o2) {
+		        return o2.getOrderDate().compareTo(o1.getOrderDate());
+		    }
+		});
 
 		JPanel ordersPanel = new JPanel(new GridBagLayout());
 		for (Order order : orders) {

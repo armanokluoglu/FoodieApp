@@ -1,187 +1,182 @@
 package view;
 
-import model.domain.Menu;
 import model.domain.Order;
-import model.domain.Restaurant;
-import model.domain.User;
 import model.utilities.FoodCostPair;
 import model.utilities.Observer;
 import model.utilities.Subject;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 public class ShoppingCartFrame extends JFrame implements Observer {
-    private static final long serialVersionUID = -4853864434524144396L;
-    private Subject subject;
-    private FrameManager fm;
-    private JPanel mainPanel;
+	private static final long serialVersionUID = -4853864434524144396L;
+	private Subject subject;
+	private FrameManager fm;
+	private JPanel mainPanel;
 
-    private JPanel leftSide;
-    private JPanel content;
+	private JPanel leftSide;
+	private JPanel content;
 
-    private JButton restaurantsButton;
-    private JButton profilePageButton;
-    private JButton logoutButton;
-    private JButton placeOrderButton;
-    public ShoppingCartFrame(FrameManager fm, Order currentOrder) {
-        this.fm = fm;
-        this.subject = currentOrder;
+	private JButton restaurantsButton;
+	private JButton profilePageButton;
+	private JButton logoutButton;
+	private JButton placeOrderButton;
 
-        if(currentOrder!=null)
-            currentOrder.register(this);
+	public ShoppingCartFrame(FrameManager fm, Order currentOrder) {
+		this.fm = fm;
+		this.subject = currentOrder;
 
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new GridLayout(1, 2));
+		if (currentOrder != null)
+			currentOrder.register(this);
 
-        JPanel leftSide = new JPanel();
-        leftSide.setLayout(new GridBagLayout());
-        leftSide.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        this.leftSide = leftSide;
+		JPanel mainPanel = new JPanel();
+		mainPanel.setLayout(new GridLayout(1, 2));
 
-        JPanel content = new JPanel();
-        content.setLayout(new BoxLayout(content, BoxLayout.PAGE_AXIS));
-        this.content = content;
+		JPanel leftSide = new JPanel();
+		leftSide.setLayout(new GridBagLayout());
+		leftSide.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		this.leftSide = leftSide;
 
-        mainPanel.add(this.leftSide);
-        mainPanel.add(this.content);
-        this.mainPanel = mainPanel;
+		JPanel content = new JPanel();
+		content.setLayout(new BoxLayout(content, BoxLayout.PAGE_AXIS));
+		this.content = content;
 
-        setLeftSide();
-        setContent();
-        getFrameManager().setNewPanel(mainPanel, "restaurant");
-    }
+		mainPanel.add(this.leftSide);
+		mainPanel.add(this.content);
+		this.mainPanel = mainPanel;
 
-    public void setLeftSide() {
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(5, 5, 5, 5);
+		setLeftSide();
+		setContent();
+		getFrameManager().setNewPanel(mainPanel, "restaurant");
+	}
 
-        JLabel titleLabel = new JLabel("Foodie", JLabel.CENTER);
-        titleLabel.setAlignmentX(JLabel.CENTER_ALIGNMENT);
-        titleLabel.setFont(new Font(titleLabel.getFont().getName(), titleLabel.getFont().getStyle(), 30));
+	public void setLeftSide() {
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.gridwidth = GridBagConstraints.REMAINDER;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.insets = new Insets(5, 5, 5, 5);
 
-        JLabel pageLabel = new JLabel("Restaurant", JLabel.CENTER);
-        pageLabel.setAlignmentX(JLabel.CENTER_ALIGNMENT);
-        pageLabel.setFont(new Font(pageLabel.getFont().getName(), pageLabel.getFont().getStyle(), 20));
+		JLabel titleLabel = new JLabel("Foodie", JLabel.CENTER);
+		titleLabel.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+		titleLabel.setFont(new Font(titleLabel.getFont().getName(), titleLabel.getFont().getStyle(), 30));
 
-        JButton restaurantsButton = new JButton("Restaurants");
-        restaurantsButton.setAlignmentX(JLabel.CENTER_ALIGNMENT);
-        restaurantsButton.setPreferredSize(new Dimension(200, 50));
-        this.restaurantsButton = restaurantsButton;
+		JLabel pageLabel = new JLabel("Restaurant", JLabel.CENTER);
+		pageLabel.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+		pageLabel.setFont(new Font(pageLabel.getFont().getName(), pageLabel.getFont().getStyle(), 20));
 
-        JButton shoppingCartButton = new JButton("Shopping Cart");
-        shoppingCartButton.setAlignmentX(JLabel.CENTER_ALIGNMENT);
-        shoppingCartButton.setPreferredSize(new Dimension(200, 50));
-        shoppingCartButton.setEnabled(false);
+		JButton restaurantsButton = new JButton("Restaurants");
+		restaurantsButton.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+		restaurantsButton.setPreferredSize(new Dimension(200, 50));
+		this.restaurantsButton = restaurantsButton;
 
-        JButton profilePageButton = new JButton("My Profile");
-        profilePageButton.setAlignmentX(JLabel.CENTER_ALIGNMENT);
-        profilePageButton.setPreferredSize(new Dimension(200, 50));
-        this.profilePageButton = profilePageButton;
+		JButton shoppingCartButton = new JButton("Shopping Cart");
+		shoppingCartButton.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+		shoppingCartButton.setPreferredSize(new Dimension(200, 50));
+		shoppingCartButton.setEnabled(false);
 
-        JButton logoutButton = new JButton("Logout");
-        logoutButton.setAlignmentX(JLabel.CENTER_ALIGNMENT);
-        logoutButton.setPreferredSize(new Dimension(200, 50));
-        this.logoutButton = logoutButton;
+		JButton profilePageButton = new JButton("My Profile");
+		profilePageButton.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+		profilePageButton.setPreferredSize(new Dimension(200, 50));
+		this.profilePageButton = profilePageButton;
 
-        leftSide.add(titleLabel, gbc);
-        leftSide.add(pageLabel, gbc);
-        leftSide.add(restaurantsButton, gbc);
-        leftSide.add(profilePageButton, gbc);
-        leftSide.add(shoppingCartButton, gbc);
-        leftSide.add(logoutButton, gbc);
-    }
+		JButton logoutButton = new JButton("Logout");
+		logoutButton.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+		logoutButton.setPreferredSize(new Dimension(200, 50));
+		this.logoutButton = logoutButton;
 
-    public void setContent() {
-        Order order = ((Order) this.subject);
-        JPanel panel = new JPanel(new GridBagLayout());
-        if(order!=null){
-            GridBagConstraints gbc = new GridBagConstraints();
-            gbc.gridwidth = GridBagConstraints.REMAINDER;
-            gbc.insets = new Insets(10, 10, 10, 10);
+		leftSide.add(titleLabel, gbc);
+		leftSide.add(pageLabel, gbc);
+		leftSide.add(restaurantsButton, gbc);
+		leftSide.add(profilePageButton, gbc);
+		leftSide.add(shoppingCartButton, gbc);
+		leftSide.add(logoutButton, gbc);
+	}
 
-            JPanel orderPanel = new JPanel(new GridBagLayout());
-            JLabel restaurantName = new JLabel("<html><FONT COLOR=RED>Restaurant:</FONT> " + order.getRestaurantName() + "</html>");
-            JLabel orderDate = new JLabel("<html><FONT COLOR=RED>Order Date:</FONT> " + order.getOrderDate() + "</html>");
-            JLabel orderAddress = new JLabel("<html><FONT COLOR=RED>Order Address:</FONT> " + order.getAddress() + "</html>");
-            JLabel totalCost = new JLabel("<html><FONT COLOR=RED>Total Cost:</FONT> $" + order.getOrderTotal() + "</html>");
-            JLabel items = new JLabel("<html><FONT COLOR=RED>Items:</FONT></html>");
+	public void setContent() {
+		Order order = ((Order) this.subject);
+		JPanel panel = new JPanel(new GridBagLayout());
+		if (order != null && order.getItems().size() > 0) {
+			GridBagConstraints gbc = new GridBagConstraints();
+			gbc.gridwidth = GridBagConstraints.REMAINDER;
+			gbc.insets = new Insets(10, 10, 10, 10);
 
-            orderPanel.add(restaurantName, gbc);
-            orderPanel.add(orderDate, gbc);
-            orderPanel.add(orderAddress, gbc);
-            orderPanel.add(totalCost, gbc);
-            orderPanel.add(items, gbc);
-            for (FoodCostPair pair : order.getItems()) {
-                JPanel itemPanel = new JPanel();
-                itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.PAGE_AXIS));
-                itemPanel.setBorder(new RoundedLineBorder(Color.BLACK, 1, 10, true));
-                JLabel itemName = new JLabel("<html><FONT COLOR=RED>Item:</FONT> " + pair.getFood() + "</html>");
-                JLabel itemCost = new JLabel("<html><FONT COLOR=RED>Cost:</FONT> $" +String.format("%.2f", pair.getCost()) + "</html>");
-                itemPanel.add(itemName, gbc);
-                itemPanel.add(itemCost, gbc);
-                Dimension d = itemPanel.getPreferredSize();
-                d.width = 310;
-                d.height = 70;
-                itemPanel.setPreferredSize(d);
-                orderPanel.add(itemPanel, gbc);
-            }
+			JPanel orderPanel = new JPanel(new GridBagLayout());
+			JLabel restaurantName = new JLabel(
+					"<html><FONT COLOR=RED>Restaurant:</FONT> " + order.getRestaurantName() + "</html>");
+			JLabel orderAddress = new JLabel(
+					"<html><FONT COLOR=RED>Order Address:</FONT> " + order.getAddress() + "</html>");
+			JLabel totalCost = new JLabel(
+					"<html><FONT COLOR=RED>Total Cost:</FONT> $" + order.getOrderTotal() + "</html>");
+			JLabel items = new JLabel("<html><FONT COLOR=RED>Items:</FONT></html>");
 
-            placeOrderButton = new JButton();
-            placeOrderButton.setText("Place Order");
-            orderPanel.add(placeOrderButton);
+			orderPanel.add(restaurantName, gbc);
+			orderPanel.add(orderAddress, gbc);
+			orderPanel.add(totalCost, gbc);
+			orderPanel.add(items, gbc);
+			for (FoodCostPair pair : order.getItems()) {
+				JPanel itemPanel = new JPanel();
+				itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.PAGE_AXIS));
+				itemPanel.setBorder(new RoundedLineBorder(Color.BLACK, 1, 10, true));
+				JLabel itemName = new JLabel("<html><FONT COLOR=RED>Item:</FONT> " + pair.getFood() + "</html>");
+				JLabel itemCost = new JLabel(
+						"<html><FONT COLOR=RED>Cost:</FONT> $" + String.format("%.2f", pair.getCost()) + "</html>");
+				itemPanel.add(itemName, gbc);
+				itemPanel.add(itemCost, gbc);
+				Dimension d = itemPanel.getPreferredSize();
+				d.width = 310;
+				d.height = 70;
+				itemPanel.setPreferredSize(d);
+				orderPanel.add(itemPanel, gbc);
+			}
 
-            orderPanel.setBorder(new RoundedLineBorder(Color.BLACK, 1, 10, true));
-            panel.add(orderPanel);
-        }
-        else{
-            JLabel infoText = new JLabel("<html><FONT COLOR=RED>There is no order for now.</FONT> </html>");
-            panel.add(infoText);
-        }
+			placeOrderButton = new JButton();
+			placeOrderButton.setText("Place Order");
+			orderPanel.add(placeOrderButton);
 
-        content.removeAll();
-        content.add(new JScrollPane(panel));
-        getFrameManager().setNewPanel(mainPanel, "user");
-    }
+			orderPanel.setBorder(new RoundedLineBorder(Color.BLACK, 1, 10, true));
+			panel.add(orderPanel);
+		} else {
+			JLabel infoText = new JLabel("<html><FONT COLOR=RED>There is no order for now.</FONT> </html>");
+			panel.add(infoText);
+		}
 
-    public void addPlaceOrderActionListener(ActionListener actionListener) {
-        placeOrderButton.addActionListener(actionListener);
-    }
+		content.removeAll();
+		content.add(new JScrollPane(panel));
+		getFrameManager().setNewPanel(mainPanel, "user");
+	}
 
-    public void addOpenRestaurantsActionListener(ActionListener actionListener) {
-        restaurantsButton.addActionListener(actionListener);
-    }
+	public void addPlaceOrderActionListener(ActionListener actionListener) {
+		placeOrderButton.addActionListener(actionListener);
+	}
 
-    public void addOpenUserProfileActionListener(ActionListener actionListener) {
-        profilePageButton.addActionListener(actionListener);
-    }
+	public void addOpenRestaurantsActionListener(ActionListener actionListener) {
+		restaurantsButton.addActionListener(actionListener);
+	}
 
-    public void addLogoutActionListener(ActionListener actionListener) {
-        logoutButton.addActionListener(actionListener);
-    }
+	public void addOpenUserProfileActionListener(ActionListener actionListener) {
+		profilePageButton.addActionListener(actionListener);
+	}
 
-    public FrameManager getFrameManager() {
-        return this.fm;
-    }
+	public void addLogoutActionListener(ActionListener actionListener) {
+		logoutButton.addActionListener(actionListener);
+	}
 
-    @Override
-    public void update() {
-        setContent();
-    }
+	public FrameManager getFrameManager() {
+		return this.fm;
+	}
 
-    @Override
-    public void addSubject(Subject sub) {
-        this.subject = sub;
-    }
+	@Override
+	public void update() {
+		setContent();
+	}
 
-    @Override
-    public void removeSubject(Subject sub) {
-        this.subject = null;
-    }
+	@Override
+	public void addSubject(Subject sub) {
+		this.subject = sub;
+	}
+
+	@Override
+	public void removeSubject(Subject sub) {
+		this.subject = null;
+	}
 }

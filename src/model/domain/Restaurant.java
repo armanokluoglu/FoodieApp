@@ -1,7 +1,6 @@
 package model.domain;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import model.utilities.Observer;
 
@@ -30,6 +29,7 @@ public class Restaurant extends User {
 		notifyObservers();
 	}
 
+	@SuppressWarnings("unused")
 	public IFood createFood(String foodName, List<String> toppings){
 		for(Menu menu:menu){
 			for (String item : menu.getItems().keySet()) {
@@ -43,7 +43,6 @@ public class Restaurant extends User {
 		return null;
 	}
 
-	
 	@Override
 	public void register(Observer obj) {
 		if (obj == null) {
