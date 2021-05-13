@@ -3,6 +3,8 @@ package controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+
+import model.domain.Customer;
 import model.domain.FoodieService;
 import model.domain.User;
 import view.RestaurantsFrame;
@@ -43,6 +45,7 @@ public class RestaurantsController {
 		}
 		
 		public void actionPerformed(ActionEvent e) {
+			((Customer)session.getCurrentUser()).initializeOrder(restaurant.getName());
 			session.restaurantPage(restaurant);
 		}
 	}

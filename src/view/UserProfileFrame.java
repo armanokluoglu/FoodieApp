@@ -152,7 +152,7 @@ public class UserProfileFrame extends JFrame implements Observer {
 				itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.PAGE_AXIS));
 				itemPanel.setBorder(new RoundedLineBorder(Color.BLACK, 1, 10, true));
 				JLabel itemName = new JLabel("<html><FONT COLOR=RED>Item:</FONT> " + pair.getFood() + "</html>");
-				JLabel itemCost = new JLabel("<html><FONT COLOR=RED>Cost:</FONT> $" + Double.parseDouble(String.format("%.2f", pair.getCost())) + "</html>");
+				JLabel itemCost = new JLabel("<html><FONT COLOR=RED>Cost:</FONT> $" +String.format("%.2f", pair.getCost()) + "</html>");
 				itemPanel.add(itemName, gbc);
 				itemPanel.add(itemCost, gbc);
 				Dimension d = itemPanel.getPreferredSize();

@@ -47,6 +47,7 @@ public class Customer extends User {
 	public void placeOrder() {
 		currentOrder.setPlaced();
 		getOrderHistory().add(currentOrder);
+		currentOrder = null;
 		notifyObservers();
 	}
 

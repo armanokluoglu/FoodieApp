@@ -10,7 +10,7 @@ public class FactoryProvider {
         if(choice.equalsIgnoreCase("pizza")) {
             return (FoodFactory) new PizzaFactory();
         }
-        else if(choice.equalsIgnoreCase("hamburger")) {
+        else if(choice.equalsIgnoreCase("burger")) {
             return (FoodFactory) new HamburgerFactory();
         }
         return null;

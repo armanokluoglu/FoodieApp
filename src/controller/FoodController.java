@@ -1,139 +1,128 @@
 package controller;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.List;
-import model.domain.Comment;
-import model.domain.Model;
-import model.domain.Outfit;
-import model.domain.User;
+import jdk.nashorn.internal.ir.IfNode;
+import model.domain.*;
 import model.utilities.Observer;
 import model.utilities.Subject;
-import view.OutfitFrame;
+import view.FoodFrame;
 
-public class FoodController implements Observer {
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
-	private SessionManager session;
-	private Subject model;
-	private Outfit outfit;
-	private OutfitFrame view;
-	private List<Comment> comments;
+public class FoodController  implements Observer {
 
-	public FoodController(Model model, OutfitFrame view, SessionManager session, Outfit outfit) {
-		this.model = model;
-		this.view = view;
-		this.session = session;
-		this.outfit = outfit;
-		this.comments = outfit.getComments();
+    private SessionManager session;
+    private Subject subject;
+    private String food;
+    private FoodFrame view;
+    private List<String> toppings;
+    private List<String> selectedToppings = new ArrayList<>();
 
-		outfit.register(this);
-		setSidebarListeners();
-		setContentListeners();
-	}
 
-	private void setSidebarListeners() {
-		view.addOpenProfileActionListener(new OpenUserListener(session.getCurrentUser()));
-		view.addLogoutActionListener(new LogoutListener());
-		view.addOpenOutfitsActionListener(new OpenOutfitsListener());
-		view.addHomeActionListener(new OpenHomeListener());
-		view.addAllUsersActionListener(new OpenAllUserListener());
-		view.addStatisticsActionListener(new OpenStatisticsListener());
-	}
+    public FoodController(FoodFrame view, SessionManager session, User restaurant, String food, List<String> toppings) {
+        this.subject = restaurant;
+        this.view = view;
+        this.session = session;
+        this.food = food;
+        this.toppings = toppings;
+        restaurant.register(this);
+        setSidebarListeners();
+        setContentListeners();
+    }
+    private void setSidebarListeners() {
+        view.addOpenRestaurantsActionListener(new FoodController.OpenRestaurantsListener());
+        view.addOpenUserProfileActionListener(new FoodController.OpenUserProfileListener());
+        view.addLogoutActionListener(new FoodController.LogoutListener());
+        view.addOpenShoppingCartActionListener(new FoodController.OpenShoppingCartListener());
+        //view.addAddToCardActionListener(new FoodController.AddToCartActionListener());
 
-	private void setContentListeners() {
-		view.addLikeOutfitActionListener(new LikeOutfitListener());
-		view.addDislikeOutfitActionListener(new DislikeOutfitListener());
-		view.addCommentOnOutfitActionListener(new AddCommentOnOutfitListener());
-		for (Comment comment : comments) {
-			view.addRemoveCommentOnOutfitActionListener(new RemoveCommentOnOutfitListener(comment), comment.getId());
-		}
-	}
+    }
+    private void setContentListeners() {
+        for(String topping: toppings){
+            view.addSelectToppingActionListener(new SelectToppingActionListener(topping),topping);
+            view.addUnSelectToppingActionListener(new UnSelectToppingActionListener(topping),topping);
+        }
+        view.addAddToCardActionListener(new AddToCartActionListener(food,selectedToppings,(User) subject));
+    }
 
-	class LikeOutfitListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			((Model) model).likeOutfitAsUser(outfit, session.getCurrentUser());
-		}
-	}
+    class AddToCartActionListener implements ActionListener {
+        public String foodName;
+        public List<String> selectedToppings;
+        public User restaurant;
+        public AddToCartActionListener(String foodName, List<String> selectedToppings,User restaurant) {
+            this.foodName = foodName;
+            this.selectedToppings = selectedToppings;
+            this.restaurant = restaurant;
+        }
 
-	class DislikeOutfitListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			((Model) model).dislikeOutfitAsUser(outfit, session.getCurrentUser());
-		}
-	}
+        public void actionPerformed(ActionEvent e) {
+            IFood cartFood = ((Restaurant)restaurant).createFood(foodName,selectedToppings);
+            ((Customer)session.getCurrentUser()).addItemToOrder(cartFood);
+            session.restaurantPage(restaurant);
+        }
+    }
+    class SelectToppingActionListener implements ActionListener {
+        public String topping;
+        public SelectToppingActionListener(String topping) {
+            this.topping = topping;
 
-	class AddCommentOnOutfitListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			((Model) model).commentOnOutfitAsUser(outfit, view.getComment(), session.getCurrentUser());
-			view.clearComment();
-		}
-	}
+        }
+        public void actionPerformed(ActionEvent e) {
+            selectedToppings.add(topping);
+        }
+    }
 
-	class RemoveCommentOnOutfitListener implements ActionListener {
-		private Comment comment;
+    class UnSelectToppingActionListener implements ActionListener {
+        public String topping;
+        public UnSelectToppingActionListener(String topping) {
+            this.topping = topping;
 
-		public RemoveCommentOnOutfitListener(Comment comment) {
-			this.comment = comment;
-		}
+        }
+        public void actionPerformed(ActionEvent e) {
+            if(selectedToppings.contains(topping))
+                selectedToppings.remove(topping);
+        }
+    }
 
-		public void actionPerformed(ActionEvent e) {
-			((Model) model).removeCommentOnOutfit(outfit, comment);
-		}
-	}
+    class OpenShoppingCartListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            session.shoppingCartPage();
+        }
+    }
 
-	class OpenAllUserListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			session.allUsersPage();
-		}
-	}
-	
-	class OpenOutfitsListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			session.outfitsPage();
-		}
-	}
+    class OpenRestaurantsListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            session.restaurantsPage();
+        }
+    }
 
-	class OpenUserListener implements ActionListener {
-		private User user;
+    class LogoutListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            session.loginPage();
+        }
+    }
 
-		public OpenUserListener(User user) {
-			this.user = user;
-		}
+    class OpenUserProfileListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            session.userProfilePage();
+        }
+    }
 
-		public void actionPerformed(ActionEvent e) {
-			session.userPage(user);
-		}
-	}
+    @Override
+    public void update() {
+        setContentListeners();
+    }
 
-	class OpenHomeListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			session.homePage();
-		}
-	}
+    @Override
+    public void addSubject(Subject sub) {
+        this.subject = sub;
+    }
 
-	class OpenStatisticsListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			session.statisticsPage();
-		}
-	}
-
-	class LogoutListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			session.loginPage();
-		}
-	}
-
-	@Override
-	public void update() {
-		setContentListeners();
-	}
-
-	@Override
-	public void addSubject(Subject sub) {
-		this.model = sub;
-	}
-
-	@Override
-	public void removeSubject(Subject sub) {
-		this.model = null;
-	}
+    @Override
+    public void removeSubject(Subject sub) {
+        this.subject = null;
+    }
 }

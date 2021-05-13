@@ -1,11 +1,17 @@
 package model.domain;
 
 import model.utilities.FoodCostPair;
+import model.utilities.Observer;
+import model.utilities.Subject;
+
+import java.io.Serializable;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Order {
+public class Order implements Subject {
 	private static int idCounter = 1;
 	private int id;
 	private List<FoodCostPair> items;
@@ -13,6 +19,7 @@ public class Order {
 	private String customerName;
 	private String restaurantName;
 	private Date orderDate;
+	private List<Observer> observers = new ArrayList<>();
 
 	public Order() {
 		id=idCounter;
@@ -103,11 +110,44 @@ public class Order {
 		return orderDate;
 	}
 
-	public double getOrderTotal() {
+	public Serializable getOrderTotal() {
 		double total = 0;
 		for (FoodCostPair foodCostPair : items) {
 			total += foodCostPair.getCost();
 		}
-		return Double.parseDouble(String.format("%.2f", total));
+		String s = String.format("%.2f", total);
+		return s;
+	}
+
+	@Override
+	public void register(Observer obj) {
+		if (obj == null) {
+			throw new NullPointerException("The given observer is null.");
+		}
+		List<Observer> observers = this.observers;
+		if (!observers.contains(obj)) {
+			observers.add(obj);
+			this.observers = observers;
+		}
+	}
+
+	@Override
+	public void unregister(Observer obj) {
+		if (obj == null) {
+			throw new NullPointerException("The given observer is null.");
+		}
+		List<Observer> observers = this.observers;
+		if (!observers.contains(obj)) {
+			observers.remove(obj);
+			this.observers = observers;
+		}
+	}
+
+	@Override
+	public void notifyObservers() {
+		List<Observer> observers = this.observers;
+		for (Observer observer : observers) {
+			observer.update();
+		}
 	}
 }

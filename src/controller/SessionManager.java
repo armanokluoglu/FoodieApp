@@ -1,10 +1,9 @@
 package controller;
 
-import model.domain.FoodieService;
-import model.domain.IFood;
-import model.domain.Restaurant;
-import model.domain.User;
+import model.domain.*;
 import view.*;
+
+import java.util.List;
 
 @SuppressWarnings("unused")
 public class SessionManager {
@@ -34,8 +33,8 @@ public class SessionManager {
 	}
 
 	public void restaurantProfilePage() {
-		RestaurantProfileFrame restaurantProfileView = new RestaurantProfileFrame(model, fm, currentUser);
-		RestaurantProfileController restaurantProfileController = new RestaurantProfileController(model, restaurantProfileView, this);
+		//RestaurantProfileFrame restaurantProfileView = new RestaurantProfileFrame(model, fm, currentUser);
+		//RestaurantProfileController restaurantProfileController = new RestaurantProfileController(model, restaurantProfileView, this);
 	}
 
 	public void restaurantPage(User restaurant) {
@@ -43,14 +42,14 @@ public class SessionManager {
 		RestaurantController restaurantController = new RestaurantController(restaurantView, this, restaurant);
 	}
 
-	public void foodPage(String food, User restaurant) {
-		FoodFrame foodView = new FoodFrame(fm, food, currentUser);
-		FoodController foodController = new FoodController(model, foodView, this, food);
+	public void foodPage(String food, List<String> toppings, User restaurant) {
+		FoodFrame foodView = new FoodFrame(fm, food,toppings,restaurant);
+		FoodController foodController = new FoodController(foodView, this,restaurant, food,toppings);
 	}
 
 	public void shoppingCartPage() {
-		ShoppingCartFrame shoppingCartView = new ShoppingCartFrame(fm, model);
-		ShoppingCartController shoppingCartControler = new ShoppingCartController(shoppingCartView, this);
+		 ShoppingCartFrame shoppingCartView = new ShoppingCartFrame(fm, ((Customer)currentUser).getCurrentOrder());
+		 ShoppingCartController shoppingCartController = new ShoppingCartController(shoppingCartView, this,((Customer)currentUser).getCurrentOrder());
 	}
 
 	public User getCurrentUser() {

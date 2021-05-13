@@ -40,27 +40,22 @@ public class RestaurantController implements Observer {
 		for (Menu submenu : menu) {
 			Map<String, List<String>> items = submenu.getItems();
 			for (String item : items.keySet()) {
-				view.addOpenFoodActionListener(new OpenFoodListener(item), item);
+				view.addOpenFoodActionListener(new OpenFoodListener(item,items.get(item)), item);
 			}
 		}
-//		List<Outfit> outfits = collection.getOutfits();
-//		for (Outfit outfit : outfits) {
-//			view.addOpenOutfitActionListener(new OpenOutfitListener(outfit), "" + outfit.getId());
-//		}
-//		view.addAddOutfitActionListener(new AddOutfitListener());
-//		for(Outfit outfit:outfits)
-//			view.addRemoveOutfitFromCollectionActionListener(new RemoveOutfitFromCollectionListener(outfit),outfit.getId());
 	}
-	
+
+
 	class OpenFoodListener implements ActionListener {
 		public String foodName;
-		
-		public OpenFoodListener(String foodName) {
+		public List<String> toppings;
+		public OpenFoodListener(String foodName, List<String> toppings) {
 			this.foodName = foodName;
+			this.toppings = toppings;
 		}
 		
 		public void actionPerformed(ActionEvent e) {
-			session.foodPage(foodName, (User) subject);
+			session.foodPage(foodName, toppings, (User) subject);
 		}
 	}
 

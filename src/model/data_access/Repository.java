@@ -24,7 +24,7 @@ public class Repository {
 	
 	public Repository(IO io) {
 		FoodFactory factory = FactoryProvider.getFactory("pizza");
-		FoodFactory factory1 = FactoryProvider.getFactory("hamburger");
+		FoodFactory factory1 = FactoryProvider.getFactory("burger");
 
 		IFood pizza1 = (IFood) factory.create("neapolitan", Arrays.asList("pepperoni","mozzarella","mushroom","olive","corn"));
 		IFood pizza2 = (IFood) factory.create("californian", Arrays.asList("pepperoni","mozzarella","mushroom","olive","corn"));

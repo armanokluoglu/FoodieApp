@@ -1,9 +1,10 @@
 package view;
 
-import model.domain.IFood;
 import model.domain.Menu;
+import model.domain.Order;
 import model.domain.Restaurant;
 import model.domain.User;
+import model.utilities.FoodCostPair;
 import model.utilities.Observer;
 import model.utilities.Subject;
 
@@ -14,8 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class FoodFrame  extends JFrame implements Observer {
-
+public class ShoppingCartFrame extends JFrame implements Observer {
     private static final long serialVersionUID = -4853864434524144396L;
     private Subject subject;
     private FrameManager fm;
@@ -25,25 +25,15 @@ public class FoodFrame  extends JFrame implements Observer {
     private JPanel content;
 
     private JButton restaurantsButton;
-    private JButton shoppingCartButton;
     private JButton profilePageButton;
     private JButton logoutButton;
-
-    private JButton addToCartButton;
-    private List<JRadioButton> selectButtons;
-    private List<JRadioButton> unSelectButtons;
-    private List<JButton> toppingButtons;
-    private List<String> toppings;
-
-    public FoodFrame(FrameManager fm, String food, List<String> toppings, User restaurant) {
+    private JButton placeOrderButton;
+    public ShoppingCartFrame(FrameManager fm, Order currentOrder) {
         this.fm = fm;
-        this.subject = restaurant;
-        this.toppings = toppings;
-        this.toppingButtons = new ArrayList<>();
-        this.selectButtons = new ArrayList<>();
-        this.unSelectButtons = new ArrayList<>();
+        this.subject = currentOrder;
 
-        restaurant.register(this);
+        if(currentOrder!=null)
+            currentOrder.register(this);
 
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new GridLayout(1, 2));
@@ -63,8 +53,7 @@ public class FoodFrame  extends JFrame implements Observer {
 
         setLeftSide();
         setContent();
-        getFrameManager().setNewPanel(mainPanel, "food");
-
+        getFrameManager().setNewPanel(mainPanel, "restaurant");
     }
 
     public void setLeftSide() {
@@ -89,7 +78,7 @@ public class FoodFrame  extends JFrame implements Observer {
         JButton shoppingCartButton = new JButton("Shopping Cart");
         shoppingCartButton.setAlignmentX(JLabel.CENTER_ALIGNMENT);
         shoppingCartButton.setPreferredSize(new Dimension(200, 50));
-        this.shoppingCartButton = shoppingCartButton;
+        shoppingCartButton.setEnabled(false);
 
         JButton profilePageButton = new JButton("My Profile");
         profilePageButton.setAlignmentX(JLabel.CENTER_ALIGNMENT);
@@ -110,79 +99,63 @@ public class FoodFrame  extends JFrame implements Observer {
     }
 
     public void setContent() {
+        Order order = ((Order) this.subject);
         JPanel panel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.insets = new Insets(10, 10, 10, 10);
+        if(order!=null){
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.gridwidth = GridBagConstraints.REMAINDER;
+            gbc.insets = new Insets(10, 10, 10, 10);
 
-        for (String topping : toppings) {
-            JPanel toppingPanel = new JPanel(new GridBagLayout());
-            toppingPanel.setLayout(new GridLayout(1, 2));
+            JPanel orderPanel = new JPanel(new GridBagLayout());
+            JLabel restaurantName = new JLabel("<html><FONT COLOR=RED>Restaurant:</FONT> " + order.getRestaurantName() + "</html>");
+            JLabel orderDate = new JLabel("<html><FONT COLOR=RED>Order Date:</FONT> " + order.getOrderDate() + "</html>");
+            JLabel orderAddress = new JLabel("<html><FONT COLOR=RED>Order Address:</FONT> " + order.getAddress() + "</html>");
+            JLabel totalCost = new JLabel("<html><FONT COLOR=RED>Total Cost:</FONT> $" + order.getOrderTotal() + "</html>");
+            JLabel items = new JLabel("<html><FONT COLOR=RED>Items:</FONT></html>");
 
-            JLabel toppingName = new JLabel("<html><FONT SIZE=5 COLOR=RED>" + topping + "</FONT></html>");
+            orderPanel.add(restaurantName, gbc);
+            orderPanel.add(orderDate, gbc);
+            orderPanel.add(orderAddress, gbc);
+            orderPanel.add(totalCost, gbc);
+            orderPanel.add(items, gbc);
+            for (FoodCostPair pair : order.getItems()) {
+                JPanel itemPanel = new JPanel();
+                itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.PAGE_AXIS));
+                itemPanel.setBorder(new RoundedLineBorder(Color.BLACK, 1, 10, true));
+                JLabel itemName = new JLabel("<html><FONT COLOR=RED>Item:</FONT> " + pair.getFood() + "</html>");
+                JLabel itemCost = new JLabel("<html><FONT COLOR=RED>Cost:</FONT> $" +String.format("%.2f", pair.getCost()) + "</html>");
+                itemPanel.add(itemName, gbc);
+                itemPanel.add(itemCost, gbc);
+                Dimension d = itemPanel.getPreferredSize();
+                d.width = 310;
+                d.height = 70;
+                itemPanel.setPreferredSize(d);
+                orderPanel.add(itemPanel, gbc);
+            }
 
-            toppingPanel.add(toppingName, gbc);
+            placeOrderButton = new JButton();
+            placeOrderButton.setText("Place Order");
+            orderPanel.add(placeOrderButton);
 
-            JRadioButton yesButton   = new JRadioButton("Yes");
-            JRadioButton noButton    = new JRadioButton("No",true);
-
-            //... Create a button group and add the buttons.
-            ButtonGroup bgroup = new ButtonGroup();
-            bgroup.add(yesButton);
-            bgroup.add(noButton);
-            //... Arrange buttons vertically in a panel
-            JPanel radioPanel = new JPanel();
-            yesButton.setName(topping + "Select");
-            noButton.setName(topping + "UnSelect");
-            radioPanel.setLayout(new GridLayout(1, 2));
-            radioPanel.add(yesButton);
-            radioPanel.add(noButton);
-            //... Add a titled border to the button panel.
-            radioPanel.setBorder(BorderFactory.createTitledBorder(
-                    BorderFactory.createEtchedBorder(), ""));
-            selectButtons.add(yesButton);
-            unSelectButtons.add(noButton);
-
-            toppingPanel.add(radioPanel);
-            toppingPanel.setBorder(new RoundedLineBorder(Color.BLACK, 1, 10, true));
-
-            panel.add(toppingPanel, gbc);
+            orderPanel.setBorder(new RoundedLineBorder(Color.BLACK, 1, 10, true));
+            panel.add(orderPanel);
         }
-        addToCartButton = new JButton();
-        addToCartButton.setBackground(java.awt.Color.WHITE);
-        addToCartButton.setText("Add To Cart");
-        panel.add(addToCartButton);
-
-
+        else{
+            JLabel infoText = new JLabel("<html><FONT COLOR=RED>There is no order for now.</FONT> </html>");
+            panel.add(infoText);
+        }
 
         content.removeAll();
         content.add(new JScrollPane(panel));
-        getFrameManager().setNewPanel(mainPanel, "food");
+        getFrameManager().setNewPanel(mainPanel, "user");
     }
 
-    public void addAddToCardActionListener(ActionListener actionListener) {
-        addToCartButton.addActionListener(actionListener);
+    public void addPlaceOrderActionListener(ActionListener actionListener) {
+        placeOrderButton.addActionListener(actionListener);
     }
-    public void addSelectToppingActionListener(ActionListener actionListener, String toppingName) {
-        for (JRadioButton selectButton: selectButtons) {
-            if (selectButton.getName().equals(toppingName+"Select")) {
-                selectButton.addActionListener(actionListener);
-            }
-        }
-    }
-    public void addUnSelectToppingActionListener(ActionListener actionListener, String toppingName) {
-        for (JRadioButton unSelectButton: unSelectButtons) {
-            if (unSelectButton.getName().equals(toppingName+"UnSelect")) {
-                unSelectButton.addActionListener(actionListener);
-            }
-        }
-    }
+
     public void addOpenRestaurantsActionListener(ActionListener actionListener) {
         restaurantsButton.addActionListener(actionListener);
-    }
-
-    public void addOpenShoppingCartActionListener(ActionListener actionListener) {
-        shoppingCartButton.addActionListener(actionListener);
     }
 
     public void addOpenUserProfileActionListener(ActionListener actionListener) {
@@ -192,10 +165,10 @@ public class FoodFrame  extends JFrame implements Observer {
     public void addLogoutActionListener(ActionListener actionListener) {
         logoutButton.addActionListener(actionListener);
     }
+
     public FrameManager getFrameManager() {
         return this.fm;
     }
-
 
     @Override
     public void update() {
