@@ -3,6 +3,7 @@ package controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import model.domain.FoodieService;
+import model.domain.Restaurant;
 import view.LoginFrame;
 
 public class LoginController {
@@ -27,7 +28,11 @@ public class LoginController {
             	username = view.getUsername();
             	password = String.valueOf(view.getPassword());
             	session.setCurrentUser(model.login(username, password));
-				session.restaurantsPage();
+            	if (session.getCurrentUser() instanceof Restaurant) {
+            		session.restaurantProfilePage();
+            	} else {
+            		session.restaurantsPage();
+            	}
             } catch (IllegalArgumentException e1) {
             	view.showMessage(e1.getMessage());
             } catch (IllegalStateException e2) {

@@ -2,81 +2,78 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
-import model.domain.Collection;
-import model.domain.Model;
+import model.domain.FoodieService;
 import model.domain.User;
-import view.AllUsersFrame;
+import model.utilities.Observer;
+import model.utilities.Subject;
+import view.RestaurantProfileFrame;
 
-public class RestaurantProfileController {
+public class RestaurantProfileController implements Observer {
 
 	private SessionManager session;
-	private AllUsersFrame view;
-	private Model model;
+	private RestaurantProfileFrame view;
+	private FoodieService model;
+	private Subject currentRestaurant;
 
-	public RestaurantProfileController(Model model, AllUsersFrame view, SessionManager session) {
+	public RestaurantProfileController(FoodieService model, RestaurantProfileFrame view, SessionManager session) {
 		this.session = session;
 		this.view = view;
+		this.currentRestaurant = session.getCurrentUser();
 		this.model = model;
 
+		currentRestaurant.register(this);
+		
 		setSidebarListeners();
 		setContentListeners();
 	}
 
 	private void setSidebarListeners() {
-		view.addOpenProfileActionListener(new OpenUserListener(session.getCurrentUser()));
 		view.addLogoutActionListener(new LogoutListener());
-		view.addOutfitsActionListener(new OpenOutfitsListener());
-		view.addStatisticsActionListener(new OpenStatisticsListener());
-		view.addHomeActionListener(new OpenHomeListener());
+		view.addOpenOrderHistoryActionListener(new OpenOrderHistoryListener());
 	}
 
 	private void setContentListeners() {
-		List<User> users = model.getAllUsers();
-		for (User user : users) {
-			view.addOpenUserActionListener(new OpenUserListener(user), user.getUsername());
-		}
+		view.addChangeNameActionListener(new ChangeNameListener());
+		view.addChangeUsernameActionListener(new ChangeUsernameListener());
+		view.addChangeAddressActionListener(new ChangeAddressListener());
 	}
-
-	class OpenUserListener implements ActionListener {
-		private User user;
-
-		public OpenUserListener(User user) {
-			this.user = user;
-		}
-
+	
+	class ChangeNameListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+        	String newName = view.showInputDialog("Enter new name:");
+        	if (newName == null || newName == "")  {
+        		return;
+        	}
+        	newName = newName.trim();
+			((FoodieService) model).changeNameOfUser(newName, (User) currentRestaurant);
+        }
+    }
+	
+	class ChangeUsernameListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+        	String newUsername = view.showInputDialog("Enter new username:");
+        	if (newUsername == null || newUsername == "")  {
+        		return;
+        	}
+        	newUsername = newUsername.trim();
+			((FoodieService) model).changeUsernameOfUser(newUsername, (User) currentRestaurant);
+        }
+    }
+	
+	class ChangeAddressListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+        	String newAddress = view.showInputDialog("Enter new address:");
+        	if (newAddress == null || newAddress == "")  {
+        		return;
+        	}
+        	newAddress = newAddress.trim();
+			((FoodieService) model).changeAddressOfUser(newAddress, (User) currentRestaurant);
+        }
+    }
+	
+	class OpenOrderHistoryListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			session.userPage(user);
-		}
-	}
-
-	class OpenCollectionListener implements ActionListener {
-		private Collection collection;
-
-		public OpenCollectionListener(Collection collection) {
-			this.collection = collection;
-		}
-
-		public void actionPerformed(ActionEvent e) {
-			session.collectionPage(collection);
-		}
-	}
-
-	class OpenStatisticsListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			session.statisticsPage();
-		}
-	}
-	class OpenHomeListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			session.homePage();
-		}
-	}
-
-
-	class OpenOutfitsListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			session.outfitsPage();
+			session.orderHistoryPage();
 		}
 	}
 
@@ -84,5 +81,20 @@ public class RestaurantProfileController {
 		public void actionPerformed(ActionEvent e) {
 			session.loginPage();
 		}
+	}
+
+	@Override
+	public void update() {
+		setContentListeners();
+	}
+
+	@Override
+	public void addSubject(Subject sub) {
+		this.currentRestaurant = sub;
+	}
+
+	@Override
+	public void removeSubject(Subject sub) {
+		this.currentRestaurant = null;
 	}
 }
