@@ -4,7 +4,11 @@ import model.domain.pizza.IPizza;
 
 public class CalifornianPizza implements IPizza {
 
-	private final double cost = 4.5;
+	private double cost;
+
+	public CalifornianPizza(double cost) {
+		this.cost = cost;
+	}
 
 	@Override
     public String decorate() {

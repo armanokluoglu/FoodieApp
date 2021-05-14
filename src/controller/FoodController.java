@@ -1,6 +1,7 @@
 package controller;
 
 import model.domain.*;
+import model.utilities.FoodCostPair;
 import model.utilities.Observer;
 import model.utilities.Subject;
 import model.utilities.ToppingPricePair;
@@ -16,14 +17,16 @@ public class FoodController implements Observer {
 	private SessionManager session;
 	private Subject subject;
 	private String food;
+	private double foodCost;
 	private FoodFrame view;
-	private List<String> selectedToppings = new ArrayList<>();
+	private List<ToppingPricePair> selectedToppings = new ArrayList<>();
 
-	public FoodController(FoodFrame view, SessionManager session, User restaurant, String food) {
+	public FoodController(FoodFrame view, SessionManager session, User restaurant, String food, double foodCost) {
 		this.subject = restaurant;
 		this.view = view;
 		this.session = session;
 		this.food = food;
+		this.foodCost = foodCost;
 		
 		restaurant.register(this);
 		
@@ -44,43 +47,45 @@ public class FoodController implements Observer {
 		List<ToppingPricePair> toppings = new ArrayList<>();
 		List<Menu> menus = restaurant.getMenu();
 		for (Menu menu : menus) {
-			Map<String, List<ToppingPricePair>> items = menu.getItems();
-			for (String item : items.keySet()) {
-				if (item.equals(food)) {
+			Map<FoodCostPair, List<ToppingPricePair>> items = menu.getItems();
+			for (FoodCostPair item : items.keySet()) {
+				if (item.getFood().equals(food)) {
 					toppings = items.get(item);
 				}
 			}
 		}
 		
 		for (ToppingPricePair topping : toppings) {
-			view.addSelectToppingActionListener(new SelectToppingActionListener(topping.getTopping()), topping.getTopping());
-			view.addUnSelectToppingActionListener(new UnSelectToppingActionListener(topping.getTopping()), topping.getTopping());
+			view.addSelectToppingActionListener(new SelectToppingActionListener(topping), topping.getTopping());
+			view.addUnSelectToppingActionListener(new UnSelectToppingActionListener(topping), topping.getTopping());
 		}
-		view.addAddToCartActionListener(new AddToCartActionListener(food, selectedToppings, (User) subject));
+		view.addAddToCartActionListener(new AddToCartActionListener(food, foodCost,selectedToppings, (User) subject));
 	}
 
 	class AddToCartActionListener implements ActionListener {
 		public String foodName;
-		public List<String> selectedToppings;
+		public double foodCost;
+		public List<ToppingPricePair> selectedToppings;
 		public User restaurant;
 
-		public AddToCartActionListener(String foodName, List<String> selectedToppings, User restaurant) {
+		public AddToCartActionListener(String foodName, double foodCost, List<ToppingPricePair> selectedToppings, User restaurant) {
 			this.foodName = foodName;
+			this.foodCost = foodCost;
 			this.selectedToppings = selectedToppings;
 			this.restaurant = restaurant;
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			IFood cartFood = ((Restaurant) restaurant).createFood(foodName, selectedToppings);
+			IFood cartFood = ((Restaurant) restaurant).createFood(foodName, foodCost, selectedToppings);
 			((Customer) session.getCurrentUser()).addItemToOrder(cartFood);
 			session.restaurantPage(restaurant);
 		}
 	}
 
 	class SelectToppingActionListener implements ActionListener {
-		public String topping;
+		public ToppingPricePair topping;
 
-		public SelectToppingActionListener(String topping) {
+		public SelectToppingActionListener(ToppingPricePair topping) {
 			this.topping = topping;
 
 		}
@@ -91,9 +96,9 @@ public class FoodController implements Observer {
 	}
 
 	class UnSelectToppingActionListener implements ActionListener {
-		public String topping;
+		public ToppingPricePair topping;
 
-		public UnSelectToppingActionListener(String topping) {
+		public UnSelectToppingActionListener(ToppingPricePair topping) {
 			this.topping = topping;
 
 		}

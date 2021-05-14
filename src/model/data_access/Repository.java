@@ -27,22 +27,6 @@ public class Repository {
 		FoodFactory factory = FactoryProvider.getFactory("pizza");
 		FoodFactory factory1 = FactoryProvider.getFactory("burger");
 
-		IFood pizza1 = (IFood) factory.create("neapolitan", Arrays.asList("pepperoni","mozzarella","mushroom","olive","corn"));
-		IFood pizza2 = (IFood) factory.create("californian", Arrays.asList("pepperoni","mozzarella","mushroom","olive","corn"));
-		IFood pizza3 = (IFood) factory.create("newyorkstyle", Arrays.asList("pepperoni","mozzarella","mushroom","olive","corn"));
-
-		IFood hamburger1 = (IFood) factory1.create("bigmac", Arrays.asList("mayonnaise","cheese","pickles","lettuce","onion","tomato"));
-		IFood hamburger2 = (IFood) factory1.create("turkey", Arrays.asList("mayonnaise","cheese","pickles","lettuce","onion","tomato"));
-
-		FoodCostPair pizza1P = new FoodCostPair(pizza1);
-		FoodCostPair pizza2P = new FoodCostPair(pizza2);
-		FoodCostPair pizza3P = new FoodCostPair(pizza3);
-		FoodCostPair hamburger1P = new FoodCostPair(hamburger1);
-		FoodCostPair hamburger2P = new FoodCostPair(hamburger2);
-
-		Map<String, List<ToppingPricePair>> pizzaMenu1 = new HashMap<>();
-		Map<String, List<ToppingPricePair>> burgerMenu1 = new HashMap<>();
-
 		ToppingPricePair toppingPricePair0 = new ToppingPricePair(0.2,"pepperoni");
 		ToppingPricePair toppingPricePair1 = new ToppingPricePair(0.3,"mushroom");
 		ToppingPricePair toppingPricePair2 = new ToppingPricePair(0.1,"olive");
@@ -55,10 +39,28 @@ public class Repository {
 		ToppingPricePair toppingPricePair9 = new ToppingPricePair(0.2,"tomato");
 		ToppingPricePair toppingPricePair10 = new ToppingPricePair(0.2,"mozzarella");
 
-		pizzaMenu1.put("neapolitan",Arrays.asList(toppingPricePair0,toppingPricePair10,toppingPricePair1,toppingPricePair2,toppingPricePair3));
-		pizzaMenu1.put("californian", Arrays.asList(toppingPricePair0,toppingPricePair10,toppingPricePair1,toppingPricePair2,toppingPricePair3));
-		burgerMenu1.put("bigmac", Arrays.asList(toppingPricePair4,toppingPricePair5,toppingPricePair6,toppingPricePair7,toppingPricePair8,toppingPricePair9));
-		burgerMenu1.put("turkey", Arrays.asList(toppingPricePair4,toppingPricePair5,toppingPricePair6,toppingPricePair7,toppingPricePair8,toppingPricePair9));
+		IFood pizza1 = (IFood) factory.create("neapolitan", 4.4 ,Arrays.asList(toppingPricePair0,toppingPricePair10,toppingPricePair1,toppingPricePair2,toppingPricePair4));
+		IFood pizza2 = (IFood) factory.create("californian", 4.2 ,Arrays.asList(toppingPricePair0,toppingPricePair1,toppingPricePair2,toppingPricePair4));
+		IFood pizza3 = (IFood) factory.create("newyorkstyle", 3.4 ,Arrays.asList(toppingPricePair0,toppingPricePair1,toppingPricePair2,toppingPricePair4));
+
+		IFood hamburger1 = (IFood) factory1.create("bigmac", 2.5, Arrays.asList(toppingPricePair4,toppingPricePair5,toppingPricePair6));
+		IFood hamburger2 = (IFood) factory1.create("turkey",4.0, Arrays.asList(toppingPricePair4,toppingPricePair5,toppingPricePair6,toppingPricePair9));
+
+		FoodCostPair pizza1P = new FoodCostPair(pizza1);
+		FoodCostPair pizza2P = new FoodCostPair(pizza2);
+		FoodCostPair pizza3P = new FoodCostPair(pizza3);
+		FoodCostPair hamburger1P = new FoodCostPair(hamburger1);
+		FoodCostPair hamburger2P = new FoodCostPair(hamburger2);
+
+		Map<FoodCostPair, List<ToppingPricePair>> pizzaMenu1 = new HashMap<>();
+		Map<FoodCostPair, List<ToppingPricePair>> burgerMenu1 = new HashMap<>();
+
+
+
+		pizzaMenu1.put(new FoodCostPair(4.4,"neapolitan"),Arrays.asList(toppingPricePair0,toppingPricePair10,toppingPricePair1,toppingPricePair2,toppingPricePair3));
+		pizzaMenu1.put(new FoodCostPair(4.2,"californian"), Arrays.asList(toppingPricePair0,toppingPricePair10,toppingPricePair1,toppingPricePair2,toppingPricePair3));
+		burgerMenu1.put(new FoodCostPair(2.5,"bigmac"), Arrays.asList(toppingPricePair4,toppingPricePair5,toppingPricePair6,toppingPricePair7,toppingPricePair8,toppingPricePair9));
+		burgerMenu1.put(new FoodCostPair(4.0,"turkey"), Arrays.asList(toppingPricePair4,toppingPricePair5,toppingPricePair6,toppingPricePair7,toppingPricePair8,toppingPricePair9));
 
 		Menu menu1 = new Menu("Pizza Menu",pizzaMenu1);
 		Menu menu2 = new Menu("Burger Menu",burgerMenu1);

@@ -5,10 +5,11 @@ import model.domain.pizza.PizzaDecorator;
 
 public class Corn extends PizzaDecorator {
 
-	private final double cost = 0.5;
+	private double cost;
 	
-    public Corn(IPizza pizza) {
+    public Corn(IPizza pizza,double cost) {
         super(pizza);
+        this.cost=cost;
     }
 
     private String decorateWithCorn() {

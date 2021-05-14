@@ -108,11 +108,12 @@ public class IOParser {
         int elemCounter=0;
         Element itemsNode = doc.createElement("Items");
         if(!menu.getItems().isEmpty()){
-            for(Map.Entry<String, List<ToppingPricePair>> item:menu.getItems().entrySet()){
+            for(Map.Entry<FoodCostPair, List<ToppingPricePair>> item:menu.getItems().entrySet()){
                 Element node = doc.createElement("Item");
                 node.setAttribute("id",String.valueOf(elemCounter));
                 elemCounter++;
-                node.appendChild(getNodeElement(doc,"Name",item.getKey()));
+                node.appendChild(getNodeElement(doc,"Name",item.getKey().getFood()));
+                node.appendChild(getNodeElement(doc,"Cost",String.valueOf(item.getKey().getCost())));
                 String ingredients = "";
                 for(ToppingPricePair ingredient:item.getValue()){
                     ingredients += ingredient.getTopping() + ":"+ingredient.getCost() + " ";

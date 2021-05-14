@@ -11,6 +11,8 @@ import javax.xml.transform.stream.StreamResult;
 import model.utilities.FoodCostPair;
 import model.utilities.ToppingPricePair;
 import org.w3c.dom.*;
+import sun.awt.FontDescriptor;
+
 import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -102,7 +104,7 @@ public class IO {
     private List<Menu> nodeToMenus(Node menusNode){
         List<Menu> menuList = new ArrayList<>();
         NodeList nList = menusNode.getChildNodes();
-        Map<String,List<ToppingPricePair>> menuMap = new HashMap<>();
+        Map<FoodCostPair,List<ToppingPricePair>> menuMap = new HashMap<>();
         for (int temp = 0; temp < nList.getLength(); temp++) {
             Node nNode = nList.item(temp);
             if (nNode.getNodeType() == Node.ELEMENT_NODE) {
@@ -118,7 +120,7 @@ public class IO {
         }
         return menuList;
     }
-    private Map<String,List<ToppingPricePair>> nodeToMenuItems(Map<String,List<ToppingPricePair>> menuMap,Node menuItems){
+    private Map<FoodCostPair,List<ToppingPricePair>> nodeToMenuItems(Map<FoodCostPair,List<ToppingPricePair>> menuMap,Node menuItems){
         NodeList nList = menuItems.getChildNodes();
         for (int temp = 0; temp < nList.getLength(); temp++) {
             Node nNode = nList.item(temp);
@@ -128,6 +130,8 @@ public class IO {
                 Element eElement = (Element) nNode;
                 int id = Integer.valueOf(eElement.getAttribute("id"));
                 String name = eElement.getElementsByTagName("Name").item(0).getTextContent();
+                double cost = Double.valueOf(eElement.getElementsByTagName("Cost").item(0).getTextContent());
+
                 String ingredients = eElement.getElementsByTagName("Ingredients").item(0).getTextContent();
                 String[] values = ingredients.split(" ");
                 if(values.length > 0) {
@@ -139,7 +143,7 @@ public class IO {
                             ingredientsList = new ArrayList<>();
                         }
                 }
-                menuMap.put(name,ingredientsList);
+                menuMap.put(new FoodCostPair(cost,name),ingredientsList);
             }
         }
         return menuMap;

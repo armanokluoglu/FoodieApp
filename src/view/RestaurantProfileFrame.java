@@ -25,6 +25,7 @@ import javax.swing.JScrollPane;
 import model.domain.Menu;
 import model.domain.Restaurant;
 import model.domain.User;
+import model.utilities.FoodCostPair;
 import model.utilities.Observer;
 import model.utilities.Subject;
 import model.utilities.ToppingPricePair;
@@ -147,19 +148,19 @@ public class RestaurantProfileFrame extends JFrame implements Observer {
 			
 			submenuPanel.add(submenuName, gbc);
 
-			Map<String, List<ToppingPricePair>> items = submenu.getItems();
-			for (String item : items.keySet()) {
+			Map<FoodCostPair, List<ToppingPricePair>> items = submenu.getItems();
+			for (FoodCostPair item : items.keySet()) {
 				JButton foodButton = new JButton();
 				ImageIcon icon = new ImageIcon("assets/" + item + ".jpg");
 
-				foodButton.setName(item);
+				foodButton.setName(item.getFood());
 				foodButton.setIcon(icon);
 				foodButton.setBackground(java.awt.Color.WHITE);
 				foodButton.setPreferredSize(new Dimension(300, 300));
 				foodButtons.add(foodButton);
 				submenuPanel.add(foodButton, gbc);
 				
-				JLabel itemName = new JLabel("<html><FONT SIZE=4 COLOR=RED>" + toTitleCase(item) + "</FONT></html>");
+				JLabel itemName = new JLabel("<html><FONT SIZE=4 COLOR=RED>" + toTitleCase(item.getFood()) + "</FONT></html>");
 				
 				List<ToppingPricePair> itemToppings = items.get(item);
 				String toppings = "";

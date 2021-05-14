@@ -8,39 +8,40 @@ import model.domain.pizza.pizzas.CalifornianPizza;
 import model.domain.pizza.pizzas.NeapolitanPizza;
 import model.domain.pizza.pizzas.NewYorkStylePizza;
 import model.domain.pizza.pizzas.SicilianPizza;
+import model.utilities.ToppingPricePair;
 
 public class PizzaFactory implements FoodFactory {
 
 	@Override
-	public IPizza create(String type, List<String> toppings) {
+	public IPizza create(String type, double pizzaCost, List<ToppingPricePair> toppings) {
 		IPizza pizza = null;
 		if (type.equalsIgnoreCase("neapolitan")) {
-			pizza = new NeapolitanPizza();
+			pizza = new NeapolitanPizza(pizzaCost);
 		}
 		else if (type.equalsIgnoreCase("californian")) {
-			pizza = new CalifornianPizza();
+			pizza = new CalifornianPizza(pizzaCost);
 		}
 		else if (type.equalsIgnoreCase("newyorkstyle")) {
-			pizza = new NewYorkStylePizza();
+			pizza = new NewYorkStylePizza(pizzaCost);
 		}
 		else if (type.equalsIgnoreCase("sicilian")) {
-			pizza = new SicilianPizza();
+			pizza = new SicilianPizza(pizzaCost);
 		}
-		for (String string : toppings) {
-			if (string.equalsIgnoreCase("pepperoni")) {
-				pizza = new Pepperoni(pizza);
+		for (ToppingPricePair topping : toppings) {
+			if (topping.getTopping().equalsIgnoreCase("pepperoni")) {
+				pizza = new Pepperoni(pizza,topping.getCost());
 			}
-			else if (string.equalsIgnoreCase("mozzarella")) {
-				pizza = new Mozzarella(pizza);
+			else if (topping.getTopping().equalsIgnoreCase("mozzarella")) {
+				pizza = new Mozzarella(pizza,topping.getCost());
 			}
-			else if (string.equalsIgnoreCase("corn")) {
-				pizza = new Corn(pizza);
+			else if (topping.getTopping().equalsIgnoreCase("corn")) {
+				pizza = new Corn(pizza,topping.getCost());
 			}
-			else if (string.equalsIgnoreCase("mushroom")) {
-				pizza = new Mushroom(pizza);
+			else if (topping.getTopping().equalsIgnoreCase("mushroom")) {
+				pizza = new Mushroom(pizza,topping.getCost());
 			}
-			else if (string.equalsIgnoreCase("olive")) {
-				pizza = new Olive(pizza);
+			else if (topping.getTopping().equalsIgnoreCase("olive")) {
+				pizza = new Olive(pizza,topping.getCost());
 			}
 		}
 		

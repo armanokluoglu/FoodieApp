@@ -5,8 +5,13 @@ import model.domain.pizza.PizzaDecorator;
 
 public class Pepperoni extends PizzaDecorator {
 	
-	private final double cost = 1.5;
-	
+	private double cost;
+
+	public Pepperoni(IPizza pizza, double cost) {
+		super(pizza);
+		this.cost = cost;
+	}
+
 	public Pepperoni(IPizza pizza) {
 		super(pizza);
 	}

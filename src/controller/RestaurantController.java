@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import model.domain.*;
+import model.utilities.FoodCostPair;
 import model.utilities.Observer;
 import model.utilities.Subject;
 import model.utilities.ToppingPricePair;
@@ -39,9 +40,9 @@ public class RestaurantController implements Observer {
 		Restaurant restaurant = ((Restaurant) this.subject);
 		List<Menu> menu = restaurant.getMenu();
 		for (Menu submenu : menu) {
-			Map<String, List<ToppingPricePair>> items = submenu.getItems();
-			for (String item : items.keySet()) {
-				view.addOpenFoodActionListener(new OpenFoodListener(item), item);
+			Map<FoodCostPair, List<ToppingPricePair>> items = submenu.getItems();
+			for (FoodCostPair item : items.keySet()) {
+				view.addOpenFoodActionListener(new OpenFoodListener(item.getFood(),item.getCost()), item.getFood());
 			}
 		}
 	}
@@ -49,13 +50,15 @@ public class RestaurantController implements Observer {
 
 	class OpenFoodListener implements ActionListener {
 		public String foodName;
+		public double foodCost;
 
-		public OpenFoodListener(String foodName) {
+		public OpenFoodListener(String foodName, double foodCost) {
 			this.foodName = foodName;
+			this.foodCost = foodCost;
 		}
 		
 		public void actionPerformed(ActionEvent e) {
-			session.foodPage(foodName, (User) subject);
+			session.foodPage(foodName, foodCost,(User) subject);
 		}
 	}
 

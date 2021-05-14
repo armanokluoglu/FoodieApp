@@ -5,8 +5,13 @@ import model.domain.hamburger.IHamburger;
 
 public class Mayonnaise extends HamburgerDecorator {
 
-	private final double cost = 0.2;
-	
+	private double cost;
+
+    public Mayonnaise(IHamburger hamburger, double cost) {
+        super(hamburger);
+        this.cost = cost;
+    }
+
     public Mayonnaise(IHamburger hamburger) {
         super(hamburger);
     }

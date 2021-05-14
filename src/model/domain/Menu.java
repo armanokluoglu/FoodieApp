@@ -1,5 +1,6 @@
 package model.domain;
 
+import model.utilities.FoodCostPair;
 import model.utilities.ToppingPricePair;
 
 import java.util.List;
@@ -10,15 +11,15 @@ public class Menu {
 	private static int idCounter=0;
 	private int id;
 	private String name;
-	private Map<String, List<ToppingPricePair>> items;
+	private Map<FoodCostPair, List<ToppingPricePair>> items;
 	
-	public Menu(String name, Map<String, List<ToppingPricePair>> items) {
+	public Menu(String name, Map<FoodCostPair, List<ToppingPricePair>> items) {
 		this.id=idCounter;
 		idCounter++;
 		this.name = name;
 		this.items = items;
 	}
-	public Menu(int id,String name, Map<String, List<ToppingPricePair>> items) {
+	public Menu(int id,String name, Map<FoodCostPair, List<ToppingPricePair>> items) {
 		this.id=id;
 		this.name = name;
 		this.items = items;
@@ -39,11 +40,11 @@ public class Menu {
 		this.name = name;
 	}
 
-	public Map<String, List<ToppingPricePair>> getItems() {
+	public Map<FoodCostPair, List<ToppingPricePair>> getItems() {
 		return items;
 	}
 
-	public void setItems(Map<String, List<ToppingPricePair>> items) {
+	public void setItems(Map<FoodCostPair, List<ToppingPricePair>> items) {
 		this.items = items;
 	}
 }

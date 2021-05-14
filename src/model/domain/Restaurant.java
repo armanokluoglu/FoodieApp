@@ -2,7 +2,10 @@ package model.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import model.utilities.FoodCostPair;
 import model.utilities.Observer;
+import model.utilities.ToppingPricePair;
 
 public class Restaurant extends User {
 
@@ -30,12 +33,12 @@ public class Restaurant extends User {
 	}
 
 	@SuppressWarnings("unused")
-	public IFood createFood(String foodName, List<String> toppings){
+	public IFood createFood(String foodName, double cost, List<ToppingPricePair> toppings){
 		for(Menu menu:menu){
-			for (String item : menu.getItems().keySet()) {
+			for (FoodCostPair item : menu.getItems().keySet()) {
 				if(menu.getItems().keySet().contains(foodName)){
 					FoodFactory factory = FactoryProvider.getFactory(menu.getName().replaceAll(" .*", ""));
-					IFood food = (IFood) factory.create(foodName, toppings);
+					IFood food = (IFood) factory.create(foodName, cost, toppings);
 					return food;
 				}
 			}

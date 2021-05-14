@@ -3,6 +3,7 @@ package view;
 import model.domain.Menu;
 import model.domain.Restaurant;
 import model.domain.User;
+import model.utilities.FoodCostPair;
 import model.utilities.Observer;
 import model.utilities.Subject;
 import model.utilities.ToppingPricePair;
@@ -20,6 +21,8 @@ public class FoodFrame extends JFrame implements Observer {
 	private static final long serialVersionUID = -4853864434524144396L;
 	private Subject subject;
 	private String food;
+	private double foodCost;
+
 	private FrameManager fm;
 	private JPanel mainPanel;
 
@@ -35,10 +38,11 @@ public class FoodFrame extends JFrame implements Observer {
 	private List<JRadioButton> selectButtons;
 	private List<JRadioButton> unSelectButtons;
 
-	public FoodFrame(FrameManager fm, String food, User restaurant) {
+	public FoodFrame(FrameManager fm, String food, double foodCost, User restaurant) {
 		this.fm = fm;
 		this.subject = restaurant;
 		this.food = food;
+		this.foodCost = foodCost;
 		this.selectButtons = new ArrayList<>();
 		this.unSelectButtons = new ArrayList<>();
 
@@ -113,9 +117,9 @@ public class FoodFrame extends JFrame implements Observer {
 		List<ToppingPricePair> toppings = new ArrayList<>();
 		List<Menu> menus = restaurant.getMenu();
 		for (Menu menu : menus) {
-			Map<String, List<ToppingPricePair>> items = menu.getItems();
-			for (String item : items.keySet()) {
-				if (item.equals(food)) {
+			Map<FoodCostPair, List<ToppingPricePair>> items = menu.getItems();
+			for (FoodCostPair item : items.keySet()) {
+				if (item.getFood().equals(food)) {
 					toppings = items.get(item);
 				}
 			}
@@ -139,7 +143,7 @@ public class FoodFrame extends JFrame implements Observer {
 			JPanel toppingPanel = new JPanel(new GridBagLayout());
 			toppingPanel.setLayout(new GridLayout(1, 2));
 
-			JLabel toppingName = new JLabel("<html><FONT SIZE=5 COLOR=RED>" + toTitleCase(topping.getTopping()) + " " + topping.getCost() + "</FONT></html>");
+			JLabel toppingName = new JLabel("<html><FONT SIZE=5 COLOR=RED>" + toTitleCase(topping.getTopping()) + " " + topping.getCost()+"$" + "</FONT></html>");
 
 			toppingPanel.add(toppingName, gbc);
 
