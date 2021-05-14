@@ -33,8 +33,8 @@ public class FoodieService implements Observer, Subject {
 	}
 	
 	public User login(String username, String password) throws IllegalArgumentException, IllegalStateException {
-		username = "armanokluoglu";
-		password = "1234";
+//		username = "calipso";
+//		password = "1234";
 		User user = repo.findUserByUsername(username);
 		if (!user.getPassword().equals(password)) {
 			throw new IllegalArgumentException("Invalid password.");

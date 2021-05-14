@@ -26,6 +26,11 @@ public class SessionManager {
 		RestaurantsFrame restaurantsView = new RestaurantsFrame(model, fm);
 		RestaurantsController restaurantsController = new RestaurantsController(model, restaurantsView, this);
 	}
+	
+	public void orderHistoryPage() {
+		OrdersFrame ordersView = new OrdersFrame(fm, currentUser);
+		OrdersController ordersController = new OrdersController(ordersView, this);
+	}
 
 	public void userProfilePage() {
 		UserProfileFrame userView = new UserProfileFrame(fm, currentUser);
@@ -33,10 +38,8 @@ public class SessionManager {
 	}
 
 	public void restaurantProfilePage() {
-		// RestaurantProfileFrame restaurantProfileView = new
-		// RestaurantProfileFrame(model, fm, currentUser);
-		// RestaurantProfileController restaurantProfileController = new
-		// RestaurantProfileController(model, restaurantProfileView, this);
+		 RestaurantProfileFrame restaurantProfileView = new RestaurantProfileFrame(fm, currentUser);
+		 RestaurantProfileController restaurantProfileController = new RestaurantProfileController(model, restaurantProfileView, this);
 	}
 
 	public void restaurantPage(User restaurant) {
