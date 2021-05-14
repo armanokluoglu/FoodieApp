@@ -5,6 +5,8 @@ import model.domain.Restaurant;
 import model.domain.User;
 import model.utilities.Observer;
 import model.utilities.Subject;
+import model.utilities.ToppingPricePair;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -108,10 +110,10 @@ public class FoodFrame extends JFrame implements Observer {
 	
 	public void setContent() {
 		Restaurant restaurant = (Restaurant) subject;
-		List<String> toppings = new ArrayList<>();
+		List<ToppingPricePair> toppings = new ArrayList<>();
 		List<Menu> menus = restaurant.getMenu();
 		for (Menu menu : menus) {
-			Map<String, List<String>> items = menu.getItems();
+			Map<String, List<ToppingPricePair>> items = menu.getItems();
 			for (String item : items.keySet()) {
 				if (item.equals(food)) {
 					toppings = items.get(item);
@@ -133,11 +135,11 @@ public class FoodFrame extends JFrame implements Observer {
 		
 		panel.add(foodImage, gbc);
 		
-		for (String topping : toppings) {
+		for (ToppingPricePair topping : toppings) {
 			JPanel toppingPanel = new JPanel(new GridBagLayout());
 			toppingPanel.setLayout(new GridLayout(1, 2));
 
-			JLabel toppingName = new JLabel("<html><FONT SIZE=5 COLOR=RED>" + toTitleCase(topping) + "</FONT></html>");
+			JLabel toppingName = new JLabel("<html><FONT SIZE=5 COLOR=RED>" + toTitleCase(topping.getTopping()) + " " + topping.getCost() + "</FONT></html>");
 
 			toppingPanel.add(toppingName, gbc);
 

@@ -8,6 +8,7 @@ import java.util.Map;
 import model.domain.*;
 import model.utilities.Observer;
 import model.utilities.Subject;
+import model.utilities.ToppingPricePair;
 import view.RestaurantFrame;
 
 public class RestaurantController implements Observer {
@@ -38,7 +39,7 @@ public class RestaurantController implements Observer {
 		Restaurant restaurant = ((Restaurant) this.subject);
 		List<Menu> menu = restaurant.getMenu();
 		for (Menu submenu : menu) {
-			Map<String, List<String>> items = submenu.getItems();
+			Map<String, List<ToppingPricePair>> items = submenu.getItems();
 			for (String item : items.keySet()) {
 				view.addOpenFoodActionListener(new OpenFoodListener(item), item);
 			}

@@ -2,6 +2,7 @@ package model.data_access;
 
 import model.domain.*;
 import model.utilities.FoodCostPair;
+import model.utilities.ToppingPricePair;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -107,14 +108,14 @@ public class IOParser {
         int elemCounter=0;
         Element itemsNode = doc.createElement("Items");
         if(!menu.getItems().isEmpty()){
-            for(Map.Entry<String, List<String>> item:menu.getItems().entrySet()){
+            for(Map.Entry<String, List<ToppingPricePair>> item:menu.getItems().entrySet()){
                 Element node = doc.createElement("Item");
                 node.setAttribute("id",String.valueOf(elemCounter));
                 elemCounter++;
                 node.appendChild(getNodeElement(doc,"Name",item.getKey()));
                 String ingredients = "";
-                for(String ingredient:item.getValue()){
-                    ingredients += ingredient + " ";
+                for(ToppingPricePair ingredient:item.getValue()){
+                    ingredients += ingredient.getTopping() + ":"+ingredient.getCost() + " ";
                 }
                 if(ingredients.length() > 0) {
                     ingredients = ingredients.substring(0, ingredients.length() - 1);

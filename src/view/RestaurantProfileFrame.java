@@ -18,7 +18,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import model.domain.Collection;
 import model.domain.User;
 import model.utilities.Observer;
 import model.utilities.Subject;
@@ -136,62 +135,62 @@ public class RestaurantProfileFrame extends JFrame implements Observer {
 	}
 
 	public void setCards() {
-		User user = ((User) this.user);
-		JPanel panel = new JPanel(new GridBagLayout());
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.gridwidth = GridBagConstraints.REMAINDER;
-		gbc.insets = new Insets(10, 10, 10, 10);
-		
-		JButton createCollectionButton = new JButton("Create New Collection");
-		createCollectionButton.setPreferredSize(new Dimension(200, 50));
-		createCollectionButton.setBackground(Color.PINK);
-		this.createCollectionButton = createCollectionButton;
-
-		JButton unfollowButton = new JButton("Unfollow");
-		unfollowButton.setPreferredSize(new Dimension(100, 50));
-		unfollowButton.setBackground(Color.RED);
-		this.unfollowButton = unfollowButton;
-		
-		JButton followButton = new JButton("Follow");
-		followButton.setPreferredSize(new Dimension(100, 50));
-		followButton.setBackground(Color.GREEN);
-		this.followButton = followButton;
-		
-		JLabel name = new JLabel("Username: " + user.getUsername());
-		JLabel followers = new JLabel("Followers: " + user.getFollowers().size());
-		JLabel followings = new JLabel("Followings: " + user.getFollowings().size());
-		JLabel collectionsLabel = new JLabel("Collections:");
-
-		List<Collection> collections = user.getCollections();
-
-		JPanel collectionsPanel = new JPanel(new GridBagLayout());
-		for (Collection collection : collections) {
-			JButton collectionButton = new JButton(collection.getName());
-			collectionButton.setPreferredSize(new Dimension(200, 50));
-			collectionsPanel.add(collectionButton, gbc);
-			collectionButtons.add(collectionButton);
-		}
-
-		if (!user.equals(currentUser)) {
-			if (currentUser.getFollowings().contains(user)) {
-				panel.add(unfollowButton, gbc);
-			} else {
-				panel.add(followButton, gbc);
-			}
-		}
-		panel.add(name, gbc);
-		panel.add(followers, gbc);
-		panel.add(followings, gbc);
-		panel.add(followings, gbc);
-		panel.add(collectionsLabel, gbc);
-		if (user.equals(currentUser)) {
-			panel.add(createCollectionButton, gbc);
-		}
-		panel.add(collectionsPanel, gbc);
-
-		content.removeAll();
-		content.add(new JScrollPane(panel));
-		getFrameManager().setNewPanel(mainPanel, "user");
+//		User user = ((User) this.user);
+//		JPanel panel = new JPanel(new GridBagLayout());
+//		GridBagConstraints gbc = new GridBagConstraints();
+//		gbc.gridwidth = GridBagConstraints.REMAINDER;
+//		gbc.insets = new Insets(10, 10, 10, 10);
+//
+//		JButton createCollectionButton = new JButton("Create New Collection");
+//		createCollectionButton.setPreferredSize(new Dimension(200, 50));
+//		createCollectionButton.setBackground(Color.PINK);
+//		this.createCollectionButton = createCollectionButton;
+//
+//		JButton unfollowButton = new JButton("Unfollow");
+//		unfollowButton.setPreferredSize(new Dimension(100, 50));
+//		unfollowButton.setBackground(Color.RED);
+//		this.unfollowButton = unfollowButton;
+//
+//		JButton followButton = new JButton("Follow");
+//		followButton.setPreferredSize(new Dimension(100, 50));
+//		followButton.setBackground(Color.GREEN);
+//		this.followButton = followButton;
+//
+//		JLabel name = new JLabel("Username: " + user.getUsername());
+//		JLabel followers = new JLabel("Followers: " + user.getFollowers().size());
+//		JLabel followings = new JLabel("Followings: " + user.getFollowings().size());
+//		JLabel collectionsLabel = new JLabel("Collections:");
+//
+//		List<Collection> collections = user.getCollections();
+//
+//		JPanel collectionsPanel = new JPanel(new GridBagLayout());
+//		for (Collection collection : collections) {
+//			JButton collectionButton = new JButton(collection.getName());
+//			collectionButton.setPreferredSize(new Dimension(200, 50));
+//			collectionsPanel.add(collectionButton, gbc);
+//			collectionButtons.add(collectionButton);
+//		}
+//
+//		if (!user.equals(currentUser)) {
+//			if (currentUser.getFollowings().contains(user)) {
+//				panel.add(unfollowButton, gbc);
+//			} else {
+//				panel.add(followButton, gbc);
+//			}
+//		}
+//		panel.add(name, gbc);
+//		panel.add(followers, gbc);
+//		panel.add(followings, gbc);
+//		panel.add(followings, gbc);
+//		panel.add(collectionsLabel, gbc);
+//		if (user.equals(currentUser)) {
+//			panel.add(createCollectionButton, gbc);
+//		}
+//		panel.add(collectionsPanel, gbc);
+//
+//		content.removeAll();
+//		content.add(new JScrollPane(panel));
+//		getFrameManager().setNewPanel(mainPanel, "user");
 	}
 
 	public void addOpenCollectionActionListener(ActionListener actionListener, String collectionName) {

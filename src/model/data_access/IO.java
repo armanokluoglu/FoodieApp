@@ -9,6 +9,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import model.utilities.FoodCostPair;
+import model.utilities.ToppingPricePair;
 import org.w3c.dom.*;
 import java.io.File;
 import java.text.DateFormat;
@@ -101,7 +102,7 @@ public class IO {
     private List<Menu> nodeToMenus(Node menusNode){
         List<Menu> menuList = new ArrayList<>();
         NodeList nList = menusNode.getChildNodes();
-        Map<String,List<String>> menuMap = new HashMap<>();
+        Map<String,List<ToppingPricePair>> menuMap = new HashMap<>();
         for (int temp = 0; temp < nList.getLength(); temp++) {
             Node nNode = nList.item(temp);
             if (nNode.getNodeType() == Node.ELEMENT_NODE) {
@@ -117,11 +118,11 @@ public class IO {
         }
         return menuList;
     }
-    private Map<String,List<String>> nodeToMenuItems(Map<String,List<String>> menuMap,Node menuItems){
+    private Map<String,List<ToppingPricePair>> nodeToMenuItems(Map<String,List<ToppingPricePair>> menuMap,Node menuItems){
         NodeList nList = menuItems.getChildNodes();
         for (int temp = 0; temp < nList.getLength(); temp++) {
             Node nNode = nList.item(temp);
-            List<String> ingredientsList = new ArrayList<>();
+            List<ToppingPricePair> ingredientsList = new ArrayList<>();
 
             if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                 Element eElement = (Element) nNode;
@@ -132,7 +133,8 @@ public class IO {
                 if(values.length > 0) {
                     for (String s : values)
                         try {
-                            ingredientsList.add(s);
+                            String[] nameCost = s.split(":");
+                            ingredientsList.add(new ToppingPricePair(Double.valueOf(nameCost[1]),nameCost[0]));
                         } catch (NumberFormatException e) {
                             ingredientsList = new ArrayList<>();
                         }

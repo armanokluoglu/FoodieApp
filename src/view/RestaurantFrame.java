@@ -25,6 +25,7 @@ import model.domain.Restaurant;
 import model.domain.User;
 import model.utilities.Observer;
 import model.utilities.Subject;
+import model.utilities.ToppingPricePair;
 
 public class RestaurantFrame extends JFrame implements Observer {
 
@@ -135,7 +136,7 @@ public class RestaurantFrame extends JFrame implements Observer {
 			
 			submenuPanel.add(submenuName, gbc);
 
-			Map<String, List<String>> items = submenu.getItems();
+			Map<String, List<ToppingPricePair>> items = submenu.getItems();
 			for (String item : items.keySet()) {
 				JButton foodButton = new JButton();
 				ImageIcon icon = new ImageIcon("assets/" + item + ".jpg");
@@ -149,10 +150,10 @@ public class RestaurantFrame extends JFrame implements Observer {
 				
 				JLabel itemName = new JLabel("<html><FONT SIZE=4 COLOR=RED>" + toTitleCase(item) + "</FONT></html>");
 				
-				List<String> itemToppings = items.get(item);
+				List<ToppingPricePair> itemToppings = items.get(item);
 				String toppings = "";
-				for (String topping : itemToppings) {
-					toppings += toTitleCase(topping) + ", ";
+				for (ToppingPricePair topping : itemToppings) {
+					toppings += toTitleCase(topping.getTopping()) + ", ";
 				}
 				toppings = toppings.substring(0, toppings.length() - 2);
 				JLabel availableToppings = new JLabel("<html><FONT SIZE=3 COLOR=RED>Available Toppings: </FONT>" + toppings + "</html>");

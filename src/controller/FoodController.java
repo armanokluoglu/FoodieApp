@@ -3,6 +3,7 @@ package controller;
 import model.domain.*;
 import model.utilities.Observer;
 import model.utilities.Subject;
+import model.utilities.ToppingPricePair;
 import view.FoodFrame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -40,10 +41,10 @@ public class FoodController implements Observer {
 
 	private void setContentListeners() {
 		Restaurant restaurant = (Restaurant) subject;
-		List<String> toppings = new ArrayList<>();
+		List<ToppingPricePair> toppings = new ArrayList<>();
 		List<Menu> menus = restaurant.getMenu();
 		for (Menu menu : menus) {
-			Map<String, List<String>> items = menu.getItems();
+			Map<String, List<ToppingPricePair>> items = menu.getItems();
 			for (String item : items.keySet()) {
 				if (item.equals(food)) {
 					toppings = items.get(item);
@@ -51,9 +52,9 @@ public class FoodController implements Observer {
 			}
 		}
 		
-		for (String topping : toppings) {
-			view.addSelectToppingActionListener(new SelectToppingActionListener(topping), topping);
-			view.addUnSelectToppingActionListener(new UnSelectToppingActionListener(topping), topping);
+		for (ToppingPricePair topping : toppings) {
+			view.addSelectToppingActionListener(new SelectToppingActionListener(topping.getTopping()), topping.getTopping());
+			view.addUnSelectToppingActionListener(new UnSelectToppingActionListener(topping.getTopping()), topping.getTopping());
 		}
 		view.addAddToCartActionListener(new AddToCartActionListener(food, selectedToppings, (User) subject));
 	}

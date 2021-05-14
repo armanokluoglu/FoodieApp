@@ -16,6 +16,7 @@ import model.domain.Order;
 import model.domain.Restaurant;
 import model.domain.User;
 import model.utilities.FoodCostPair;
+import model.utilities.ToppingPricePair;
 
 public class Repository {
 
@@ -39,13 +40,25 @@ public class Repository {
 		FoodCostPair hamburger1P = new FoodCostPair(hamburger1);
 		FoodCostPair hamburger2P = new FoodCostPair(hamburger2);
 
-		Map<String, List<String>> pizzaMenu1 = new HashMap<>();
-		Map<String, List<String>> burgerMenu1 = new HashMap<>();
+		Map<String, List<ToppingPricePair>> pizzaMenu1 = new HashMap<>();
+		Map<String, List<ToppingPricePair>> burgerMenu1 = new HashMap<>();
 
-		pizzaMenu1.put("neapolitan",Arrays.asList("pepperoni","mozzarella","mushroom","olive","corn"));
-		pizzaMenu1.put("californian", Arrays.asList("pepperoni","mozzarella","mushroom","olive","corn"));
-		burgerMenu1.put("bigmac", Arrays.asList("mayonnaise","cheese","pickles","lettuce","onion","tomato"));
-		burgerMenu1.put("turkey", Arrays.asList("mayonnaise","cheese","pickles","lettuce","onion","tomato"));
+		ToppingPricePair toppingPricePair0 = new ToppingPricePair(0.2,"pepperoni");
+		ToppingPricePair toppingPricePair1 = new ToppingPricePair(0.3,"mushroom");
+		ToppingPricePair toppingPricePair2 = new ToppingPricePair(0.1,"olive");
+		ToppingPricePair toppingPricePair3 = new ToppingPricePair(0.6,"corn");
+		ToppingPricePair toppingPricePair4 = new ToppingPricePair(0.2,"mayonnaise");
+		ToppingPricePair toppingPricePair5 = new ToppingPricePair(0.3,"cheese");
+		ToppingPricePair toppingPricePair6 = new ToppingPricePair(0.1,"pickles");
+		ToppingPricePair toppingPricePair7 = new ToppingPricePair(0.4,"lettuce");
+		ToppingPricePair toppingPricePair8 = new ToppingPricePair(0.3,"onion");
+		ToppingPricePair toppingPricePair9 = new ToppingPricePair(0.2,"tomato");
+		ToppingPricePair toppingPricePair10 = new ToppingPricePair(0.2,"mozzarella");
+
+		pizzaMenu1.put("neapolitan",Arrays.asList(toppingPricePair0,toppingPricePair10,toppingPricePair1,toppingPricePair2,toppingPricePair3));
+		pizzaMenu1.put("californian", Arrays.asList(toppingPricePair0,toppingPricePair10,toppingPricePair1,toppingPricePair2,toppingPricePair3));
+		burgerMenu1.put("bigmac", Arrays.asList(toppingPricePair4,toppingPricePair5,toppingPricePair6,toppingPricePair7,toppingPricePair8,toppingPricePair9));
+		burgerMenu1.put("turkey", Arrays.asList(toppingPricePair4,toppingPricePair5,toppingPricePair6,toppingPricePair7,toppingPricePair8,toppingPricePair9));
 
 		Menu menu1 = new Menu("Pizza Menu",pizzaMenu1);
 		Menu menu2 = new Menu("Burger Menu",burgerMenu1);
@@ -83,6 +96,10 @@ public class Repository {
 		List<User> customers = new ArrayList<>();
 		customers.add(customer);
 		customers.add(customer2);
+		List<User> all = new ArrayList<>();
+		all.addAll(restaurants);all.addAll(customers);
+		io.outputUsers(all);
+		io.inputUsers();
 		this.customers = customers;
 	}
 
