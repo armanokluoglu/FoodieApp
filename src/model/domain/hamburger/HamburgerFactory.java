@@ -60,6 +60,18 @@ public class HamburgerFactory implements FoodFactory {
 		return types;
 	}
     
+	public static List<String> getToppings() {
+		List<String> toppings = new ArrayList<>();
+		toppings.add("Cheese");
+		toppings.add("Cucumber");
+		toppings.add("Lettuce");
+		toppings.add("Mayonnaise");
+		toppings.add("Onion");
+		toppings.add("Pickles");
+		toppings.add("Tomato");
+		return toppings;
+	}
+	
     private boolean containsIgnoreCase(String src, String what) {
 	    final int length = what.length();
 	    if (length == 0)

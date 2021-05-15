@@ -37,7 +37,7 @@ public class Repository {
 		ToppingPricePair toppingPricePair7 = new ToppingPricePair(0.4,"lettuce");
 		ToppingPricePair toppingPricePair8 = new ToppingPricePair(0.3,"onion");
 		ToppingPricePair toppingPricePair9 = new ToppingPricePair(0.2,"tomato");
-		ToppingPricePair toppingPricePair10 = new ToppingPricePair(0.2,"mozzarella");
+		ToppingPricePair toppingPricePair10 = new ToppingPricePair(0.2,"mozarella");
 
 		IFood pizza1 = (IFood) factory.create("neapolitan", 4.4 ,Arrays.asList(toppingPricePair0,toppingPricePair10,toppingPricePair1,toppingPricePair2,toppingPricePair4));
 		IFood pizza2 = (IFood) factory.create("californian", 4.2 ,Arrays.asList(toppingPricePair0,toppingPricePair1,toppingPricePair2,toppingPricePair4));
@@ -55,12 +55,25 @@ public class Repository {
 		Map<FoodCostPair, List<ToppingPricePair>> pizzaMenu1 = new HashMap<>();
 		Map<FoodCostPair, List<ToppingPricePair>> burgerMenu1 = new HashMap<>();
 
+		List<ToppingPricePair> pizzaToppings = new ArrayList<>();
+		pizzaToppings.add(toppingPricePair0);
+		pizzaToppings.add(toppingPricePair10);
+		pizzaToppings.add(toppingPricePair1);
+		pizzaToppings.add(toppingPricePair2);
+		pizzaToppings.add(toppingPricePair3);
+		
+		List<ToppingPricePair> burgerToppings = new ArrayList<>();
+		burgerToppings.add(toppingPricePair4);
+		burgerToppings.add(toppingPricePair5);
+		burgerToppings.add(toppingPricePair6);
+		burgerToppings.add(toppingPricePair7);
+		burgerToppings.add(toppingPricePair8);
+		burgerToppings.add(toppingPricePair9);
 
-
-		pizzaMenu1.put(new FoodCostPair(4.4,"Neapolitan Pizza"),Arrays.asList(toppingPricePair0,toppingPricePair10,toppingPricePair1,toppingPricePair2,toppingPricePair3));
-		pizzaMenu1.put(new FoodCostPair(4.2,"Californian Pizza"), Arrays.asList(toppingPricePair0,toppingPricePair10,toppingPricePair1,toppingPricePair2,toppingPricePair3));
-		burgerMenu1.put(new FoodCostPair(2.5,"Big Mac Hamburger"), Arrays.asList(toppingPricePair4,toppingPricePair5,toppingPricePair6,toppingPricePair7,toppingPricePair8,toppingPricePair9));
-		burgerMenu1.put(new FoodCostPair(4.0,"Turkey Burger"), Arrays.asList(toppingPricePair4,toppingPricePair5,toppingPricePair6,toppingPricePair7,toppingPricePair8,toppingPricePair9));
+		pizzaMenu1.put(new FoodCostPair(4.4,"Neapolitan Pizza"), pizzaToppings);
+		pizzaMenu1.put(new FoodCostPair(4.2,"Californian Pizza"), pizzaToppings);
+		burgerMenu1.put(new FoodCostPair(2.5,"Big Mac Hamburger"), burgerToppings);
+		burgerMenu1.put(new FoodCostPair(4.0,"Turkey Burger"), burgerToppings);
 
 		Menu menu1 = new Menu("Pizza Menu",pizzaMenu1);
 		Menu menu2 = new Menu("Burger Menu",burgerMenu1);

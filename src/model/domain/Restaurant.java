@@ -87,7 +87,75 @@ public class Restaurant extends User {
 			}
 		}
 	}
+	
+	public void changeCostForFood(String food, double cost) {
+		List<Menu> menu = getMenu();
+		for (Menu submenu : menu) {
+			Map<FoodCostPair, List<ToppingPricePair>> items = submenu.getItems();
+			for (FoodCostPair pair : items.keySet()) {
+				if (pair.getFood().equalsIgnoreCase(food)) {
+					pair.setCost(cost);
+					notifyObservers();
+					return;
+				}
+			}
+		}
+	}
+	
+	public void changeToppingCostForFood(ToppingPricePair topping, String food, double cost) {
+		List<Menu> menu = getMenu();
+		for (Menu submenu : menu) {
+			Map<FoodCostPair, List<ToppingPricePair>> items = submenu.getItems();
+			for (FoodCostPair pair : items.keySet()) {
+				if (pair.getFood().equalsIgnoreCase(food)) {
+					List<ToppingPricePair> toppings = items.get(pair);
+					for (ToppingPricePair top : toppings) {
+						if (top.getTopping().equals(topping.getTopping())) {
+							top.setCost(cost);
+							notifyObservers();
+							return;
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	public void addToppingToFood(String topping, String food, double cost) {
+		List<Menu> menu = getMenu();
+		for (Menu submenu : menu) {
+			Map<FoodCostPair, List<ToppingPricePair>> items = submenu.getItems();
+			for (FoodCostPair pair : items.keySet()) {
+				if (pair.getFood().equalsIgnoreCase(food)) {
+					List<ToppingPricePair> toppings = items.get(pair);
+					ToppingPricePair newPair = new ToppingPricePair(cost, topping);
+					toppings.add(newPair);
+					notifyObservers();
+					return;
+				}
+			}
+		}
+	}
 
+	public void removeToppingFromFood(ToppingPricePair topping, String food) {
+		List<Menu> menu = getMenu();
+		for (Menu submenu : menu) {
+			Map<FoodCostPair, List<ToppingPricePair>> items = submenu.getItems();
+			for (FoodCostPair pair : items.keySet()) {
+				if (pair.getFood().equalsIgnoreCase(food)) {
+					List<ToppingPricePair> toppings = items.get(pair);
+					for (ToppingPricePair top : toppings) {
+						if (top.getTopping().equals(topping.getTopping())) {
+							toppings.remove(top);
+							notifyObservers();
+							return;
+						}
+					}
+				}
+			}
+		}
+	}
+	
 	@Override
 	public void register(Observer obj) {
 		if (obj == null) {
@@ -119,5 +187,4 @@ public class Restaurant extends User {
 			observer.update();
 		}
 	}
-
 }

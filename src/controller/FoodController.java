@@ -16,30 +16,36 @@ public class FoodController implements Observer {
 
 	private SessionManager session;
 	private Subject subject;
+	private boolean isRestaurant;
 	private String food;
-	private double foodCost;
+	private FoodieService model;
 	private FoodFrame view;
 	private List<ToppingPricePair> selectedToppings = new ArrayList<>();
 
-	public FoodController(FoodFrame view, SessionManager session, User restaurant, String food, double foodCost) {
+	public FoodController(FoodieService model, FoodFrame view, SessionManager session, User restaurant, String food) {
 		this.subject = restaurant;
+		this.model = model;
 		this.view = view;
+		this.isRestaurant = restaurant.getId() == session.getCurrentUser().getId();
 		this.session = session;
 		this.food = food;
-		this.foodCost = foodCost;
-		
+
 		restaurant.register(this);
-		
+
 		setSidebarListeners();
 		setContentListeners();
 	}
 
 	private void setSidebarListeners() {
-		view.addOpenRestaurantsActionListener(new FoodController.OpenRestaurantsListener());
-		view.addOpenUserProfileActionListener(new FoodController.OpenUserProfileListener());
-		view.addLogoutActionListener(new FoodController.LogoutListener());
-		view.addOpenShoppingCartActionListener(new FoodController.OpenShoppingCartListener());
-
+		if (isRestaurant) {
+			view.addOpenRestaurantProfileActionListener(new OpenRestaurantProfileListener());
+			view.addOpenOrderHistoryActionListener(new OpenOrderHistoryListener());
+		} else {
+			view.addOpenRestaurantsActionListener(new OpenRestaurantsListener());
+			view.addOpenUserProfileActionListener(new OpenUserProfileListener());
+			view.addLogoutActionListener(new LogoutListener());
+			view.addOpenShoppingCartActionListener(new OpenShoppingCartListener());
+		}
 	}
 
 	private void setContentListeners() {
@@ -54,34 +60,148 @@ public class FoodController implements Observer {
 				}
 			}
 		}
-		
+
 		for (ToppingPricePair topping : toppings) {
-			view.addSelectToppingActionListener(new SelectToppingActionListener(topping), topping.getTopping());
-			view.addUnSelectToppingActionListener(new UnSelectToppingActionListener(topping), topping.getTopping());
+			if (isRestaurant) {
+			view.addChangeToppingCostActionListener(new ChangeToppingCostActionListener(topping), topping.getTopping());
+			view.addRemoveToppingActionListener(new RemoveToppingCostActionListener(topping), topping.getTopping());
+			} else {
+				view.addSelectToppingActionListener(new SelectToppingActionListener(topping), topping.getTopping());
+				view.addUnSelectToppingActionListener(new UnSelectToppingActionListener(topping), topping.getTopping());
+			}
 		}
-		view.addAddToCartActionListener(new AddToCartActionListener(food, foodCost,selectedToppings, (User) subject));
+		if (isRestaurant) {
+			view.addAddToppingActionListener(new AddToppingActionListener());
+			view.addChangeCostActionListener(new ChangeCostActionListener());
+		} else {
+			view.addAddToCartActionListener(new AddToCartActionListener());
+		}
 	}
 
 	class AddToCartActionListener implements ActionListener {
-		public String foodName;
-		public double foodCost;
-		public List<ToppingPricePair> selectedToppings;
-		public User restaurant;
-
-		public AddToCartActionListener(String foodName, double foodCost, List<ToppingPricePair> selectedToppings, User restaurant) {
-			this.foodName = foodName;
-			this.foodCost = foodCost;
-			this.selectedToppings = selectedToppings;
-			this.restaurant = restaurant;
-		}
-
 		public void actionPerformed(ActionEvent e) {
-			IFood cartFood = ((Restaurant) restaurant).createFood(foodName, foodCost, selectedToppings);
+			double foodCost = 0;
+			Restaurant restaurant = (Restaurant) subject;
+			List<Menu> menu = restaurant.getMenu();
+			for (Menu submenu : menu) {
+				Map<FoodCostPair, List<ToppingPricePair>> items = submenu.getItems();
+				for (FoodCostPair pair : items.keySet()) {
+					if (pair.getFood().equalsIgnoreCase(food)) {
+						foodCost = pair.getCost();
+						return;
+					}
+				}
+			}
+			IFood cartFood = ((Restaurant) restaurant).createFood(food, foodCost, selectedToppings);
 			((Customer) session.getCurrentUser()).addItemToOrder(cartFood);
 			session.restaurantPage(restaurant);
 		}
 	}
 
+	class AddToppingActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			List<Menu> menu = ((Restaurant) subject).getMenu();
+    		List<String> joint = new ArrayList<>();
+			
+    		out:
+			for (Menu submenu : menu) {
+				Map<FoodCostPair, List<ToppingPricePair>> items = submenu.getItems();
+				for (FoodCostPair item : items.keySet()) {
+					if (item.getFood().equalsIgnoreCase(food)) {
+						List<String> allToppings = ((FoodieService) model).getAllToppingsOfMenu(submenu.getName().replace(" Menu", ""));
+						
+						outerLoop:
+						for (int i = 0; i < allToppings.size(); i++) {
+							String topping = allToppings.get(i);
+							
+							List<ToppingPricePair> tops = items.get(item);
+							for (ToppingPricePair pair : tops) {
+								if (pair.getTopping().equalsIgnoreCase(topping)) {
+									continue outerLoop;
+								}
+							}
+							joint.add(topping);
+						}
+						break out;
+	    			}
+				}
+    		}
+				
+			String[] choices = joint.stream().toArray(String[]::new);
+			
+			if (choices.length == 0) {
+				view.showMessage("No different topping to add.");
+			} else {
+				Object item = (view.showSelectDialog("Choose a topping to add: ", choices));
+				if (item == null || item == "") {
+					return;
+				}
+				
+				Object cost = (view.showInputDialog("Enter the price of the topping: "));
+				if (cost == null || cost == "") {
+					return;
+				}
+				
+				try {
+					((FoodieService) model).addToppingToFoodOfRestaurant(food, item.toString(), Double.parseDouble(cost.toString()), (Restaurant) subject);
+				} catch (IllegalStateException e1) {
+					view.showMessage(e1.getMessage());
+					return;
+				}
+			}
+		}
+	}
+	
+	class ChangeCostActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			Object cost = (view.showInputDialog("Enter the new cost of the item: "));
+			if (cost == null || cost == "") {
+				return;
+			}
+			
+			try {
+				((FoodieService) model).changeFoodCostForRestaurant(food, Double.parseDouble(cost.toString()), (Restaurant) subject);
+			} catch (IllegalStateException e1) {
+				view.showMessage(e1.getMessage());
+				return;
+			}
+		}
+	}
+	
+	class ChangeToppingCostActionListener implements ActionListener {
+		public ToppingPricePair topping;
+
+		public ChangeToppingCostActionListener(ToppingPricePair topping) {
+			this.topping = topping;
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			Object cost = (view.showInputDialog("Enter the new cost of the topping: "));
+			if (cost == null || cost == "") {
+				return;
+			}
+			
+			try {
+				((FoodieService) model).changeToppingCostForFoodForRestaurant(topping, food, Double.parseDouble(cost.toString()), (Restaurant) subject);
+			} catch (IllegalStateException e1) {
+				view.showMessage(e1.getMessage());
+				return;
+			}
+		}
+	}
+	
+	class RemoveToppingCostActionListener implements ActionListener {
+		public ToppingPricePair topping;
+
+		public RemoveToppingCostActionListener(ToppingPricePair topping) {
+			this.topping = topping;
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			((FoodieService) model).removeToppingFromFoodForRestaurant(topping, food, (Restaurant) subject);
+		}
+	}
+	
 	class SelectToppingActionListener implements ActionListener {
 		public ToppingPricePair topping;
 
@@ -108,7 +228,19 @@ public class FoodController implements Observer {
 				selectedToppings.remove(topping);
 		}
 	}
-
+	
+	class OpenRestaurantProfileListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			session.restaurantProfilePage();
+		}
+	}
+	
+	class OpenOrderHistoryListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			session.orderHistoryPage();
+		}
+	}
+	
 	class OpenShoppingCartListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			session.shoppingCartPage();

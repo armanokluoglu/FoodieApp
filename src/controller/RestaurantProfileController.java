@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import model.domain.FoodieService;
 import model.domain.Menu;
 import model.domain.Restaurant;
@@ -51,8 +50,23 @@ public class RestaurantProfileController implements Observer {
 			view.addNewItemActionListener(new AddItemListener(submenu.getName()), submenu.getName());
 			Map<FoodCostPair, List<ToppingPricePair>> items = submenu.getItems();
 			for (FoodCostPair item : items.keySet()) {
+				view.addOpenFoodActionListener(new OpenFoodListener(item.getFood(),item.getCost()), item.getFood());
 				view.addRemoveItemActionListener(new RemoveItemListener(submenu.getName(), item.getFood()), item.getFood());
 			}
+		}
+	}
+	
+	class OpenFoodListener implements ActionListener {
+		public String foodName;
+		public double foodCost;
+
+		public OpenFoodListener(String foodName, double foodCost) {
+			this.foodName = foodName;
+			this.foodCost = foodCost;
+		}
+		
+		public void actionPerformed(ActionEvent e) {
+			session.foodPage(foodName, (User) currentRestaurant);
 		}
 	}
 	

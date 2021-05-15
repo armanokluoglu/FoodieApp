@@ -10,7 +10,7 @@ public class FrameManager {
     public FrameManager() {
         this.frame = new JFrame();
         frame = new JFrame("Foodie");
-        frame.setSize(1000, 800);
+        frame.setSize(1200, 800);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
     }

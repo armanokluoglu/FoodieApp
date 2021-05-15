@@ -136,6 +136,7 @@ public class RestaurantFrame extends JFrame implements Observer {
 			JLabel submenuName = new JLabel("<html><FONT SIZE=5 COLOR=RED>" + submenu.getName() + "</FONT></html>");
 			
 			submenuPanel.add(submenuName, gbc);
+			submenuPanel.setBorder(new RoundedLineBorder(Color.BLACK, 1, 10, true));
 
 			Map<FoodCostPair, List<ToppingPricePair>> items = submenu.getItems();
 			for (FoodCostPair item : items.keySet()) {
@@ -147,26 +148,38 @@ public class RestaurantFrame extends JFrame implements Observer {
 				foodButton.setBackground(java.awt.Color.WHITE);
 				foodButton.setPreferredSize(new Dimension(300, 300));
 				foodButtons.add(foodButton);
+				
 				submenuPanel.add(foodButton, gbc);
 				
 				JLabel itemName = new JLabel("<html><FONT SIZE=4><FONT COLOR=RED>" + toTitleCase(item.getFood()) + "</FONT> $" + item.getCost() + "</FONT></html>");
+				submenuPanel.add(itemName, gbc);
 				
+				String toppings = "None";
 				List<ToppingPricePair> itemToppings = items.get(item);
-				String toppings = "";
-				for (ToppingPricePair topping : itemToppings) {
-					toppings += toTitleCase(topping.getTopping()) + ", ";
+				if(itemToppings.size() > 0) {
+					toppings = "";
+					for (ToppingPricePair topping : itemToppings) {
+						toppings += toTitleCase(topping.getTopping()) + ", ";
+					}
+					toppings = toppings.substring(0, toppings.length() - 2);
 				}
-				toppings = toppings.substring(0, toppings.length() - 2);
+				
 				JLabel availableToppings = new JLabel("<html><FONT SIZE=3 COLOR=RED>Available Toppings: </FONT>" + toppings + "</html>");
 				availableToppings.setBorder(BorderFactory.createEmptyBorder(0, 0, 40, 0));
-				
-				submenuPanel.add(itemName, gbc);
 				submenuPanel.add(availableToppings, gbc);
-				submenuPanel.setBorder(new RoundedLineBorder(Color.BLACK, 1, 10, true));
 			}
+
+			if (items.keySet().size() == 0) {
+				submenuPanel.add(new JLabel("<html><FONT SIZE=4 COLOR=RED>This menu does not have any items right now.</FONT></html>"), gbc);
+			}
+			
 			panel.add(submenuPanel, gbc);
 		}
-
+		
+		if (menu.size() == 0) {
+			panel.add(new JLabel("<html><FONT SIZE=4 COLOR=RED>This restaurant does not have any menus right now.</FONT></html>"), gbc);
+		}
+		
 		content.removeAll();
 		content.add(new JScrollPane(panel));
 		getFrameManager().setNewPanel(mainPanel, "user");

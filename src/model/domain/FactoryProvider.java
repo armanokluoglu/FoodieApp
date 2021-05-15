@@ -40,4 +40,13 @@ public class FactoryProvider {
 		}
 		return new ArrayList<>();
 	}
+
+	public static List<String> getToppingsOfMenu(String menu) {
+		if (menu.equalsIgnoreCase("pizza")) {
+			return PizzaFactory.getToppings();
+		} else if (menu.equalsIgnoreCase("burger")) {
+			return HamburgerFactory.getToppings();
+		}
+		return new ArrayList<>();
+	}
 }

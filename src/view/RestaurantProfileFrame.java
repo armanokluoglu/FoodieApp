@@ -249,6 +249,14 @@ public class RestaurantProfileFrame extends JFrame implements Observer {
 			}
 		}
 	}
+
+	public void addOpenFoodActionListener(ActionListener actionListener, String foodName) {
+		for (JButton jButton : foodButtons) {
+			if (jButton.getName().equals(foodName)) {
+				jButton.addActionListener(actionListener);
+			}
+		}
+	}
 	
 	public void addCreateMenuActionListener(ActionListener actionListener) {
 		createMenuButton.addActionListener(actionListener);

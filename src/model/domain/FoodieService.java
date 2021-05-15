@@ -5,6 +5,7 @@ import model.data_access.IO;
 import model.data_access.Repository;
 import model.utilities.Observer;
 import model.utilities.Subject;
+import model.utilities.ToppingPricePair;
 
 public class FoodieService implements Observer, Subject {
 
@@ -33,7 +34,7 @@ public class FoodieService implements Observer, Subject {
 	}
 	
 	public User login(String username, String password) throws IllegalArgumentException, IllegalStateException {
-		username = "calipso2";
+		username = "calipso";
 		password = "1234";
 		User user = repo.findUserByUsername(username);
 		if (!user.getPassword().equals(password)) {
@@ -140,9 +141,9 @@ public class FoodieService implements Observer, Subject {
 		currentRestaurant.createFoodAndAddToMenu(menuName, foodName, foodCost);
 	}
 
-	public void createMenuForRestaurant(String menuName, Restaurant currentRestaurant) {
+	public void createMenuForRestaurant(String menuName, Restaurant restaurant) {
 		Menu menu = new Menu(menuName + " Menu", new HashMap<>());
-		currentRestaurant.addMenu(menu);
+		restaurant.addMenu(menu);
 	}
 
 	public List<String> getAllMenuTypes() {
@@ -153,7 +154,27 @@ public class FoodieService implements Observer, Subject {
 		return FactoryProvider.getFoodTypes(menuName);
 	}
 
-	public void removeItemInMenuFromRestaurant(String menuName, String itemName, Restaurant currentRestaurant) {
-		currentRestaurant.removeFoodFromMenu(menuName, itemName);
+	public void removeItemInMenuFromRestaurant(String menuName, String itemName, Restaurant restaurant) {
+		restaurant.removeFoodFromMenu(menuName, itemName);
+	}
+
+	public void changeToppingCostForFoodForRestaurant(ToppingPricePair topping, String food, double cost, Restaurant restaurant) {
+		restaurant.changeToppingCostForFood(topping, food, cost);
+	}
+
+	public void removeToppingFromFoodForRestaurant(ToppingPricePair topping, String food, Restaurant restaurant) {
+		restaurant.removeToppingFromFood(topping, food);
+	}
+
+	public void changeFoodCostForRestaurant(String food, double cost, Restaurant restaurant) {
+		restaurant.changeCostForFood(food, cost);
+	}
+
+	public List<String> getAllToppingsOfMenu(String menu) {
+		return FactoryProvider.getToppingsOfMenu(menu);
+	}
+
+	public void addToppingToFoodOfRestaurant(String food, String topping, double cost, Restaurant restaurant) {
+		restaurant.addToppingToFood(topping, food, cost);
 	}
 }

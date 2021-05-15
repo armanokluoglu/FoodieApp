@@ -58,6 +58,16 @@ public class PizzaFactory implements FoodFactory {
 		return types;
 	}
 	
+	public static List<String> getToppings() {
+		List<String> toppings = new ArrayList<>();
+		toppings.add("Corn");
+		toppings.add("Mozarella");
+		toppings.add("Mushroom");
+		toppings.add("Olive");
+		toppings.add("Pepperoni");
+		return toppings;
+	}
+	
 	private boolean containsIgnoreCase(String src, String what) {
 	    final int length = what.length();
 	    if (length == 0)

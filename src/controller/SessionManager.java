@@ -47,9 +47,9 @@ public class SessionManager {
 		RestaurantController restaurantController = new RestaurantController(restaurantView, this, restaurant);
 	}
 
-	public void foodPage(String food, double foodCost, User restaurant) {
-		FoodFrame foodView = new FoodFrame(fm, food,foodCost, restaurant);
-		FoodController foodController = new FoodController(foodView, this, restaurant, food,foodCost);
+	public void foodPage(String food, User restaurant) {
+		FoodFrame foodView = new FoodFrame(fm, food, restaurant, currentUser);
+		FoodController foodController = new FoodController(model, foodView, this, restaurant, food);
 	}
 
 	public void shoppingCartPage() {
