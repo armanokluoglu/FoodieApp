@@ -33,7 +33,7 @@ public class FoodieService implements Observer, Subject {
 	}
 	
 	public User login(String username, String password) throws IllegalArgumentException, IllegalStateException {
-		username = "armanokluoglu";
+		username = "calipso2";
 		password = "1234";
 		User user = repo.findUserByUsername(username);
 		if (!user.getPassword().equals(password)) {
@@ -123,5 +123,33 @@ public class FoodieService implements Observer, Subject {
 	@Override
 	public void removeSubject(Subject sub) {
 		this.subjects.remove(sub);
+	}
+
+	public void removeMenuFromRestaurant(String menuName, Restaurant currentRestaurant) {
+		List<Menu> menu = currentRestaurant.getMenu();
+		for (Menu submenu : menu) {
+			if (submenu.getName().equals(menuName)) {
+				menu.remove(submenu);
+				break;
+			}
+		}
+		currentRestaurant.setMenu(menu);
+	}
+	
+	public void addFoodToMenuOfRestaurant(String menuName, String foodName, double foodCost, Restaurant currentRestaurant) {
+		currentRestaurant.createFoodAndAddToMenu(menuName, foodName, foodCost);
+	}
+
+	public void createMenuForRestaurant(String menuName, Restaurant currentRestaurant) {
+		Menu menu = new Menu(menuName + " Menu", new HashMap<>());
+		currentRestaurant.addMenu(menu);
+	}
+
+	public List<String> getAllMenuTypes() {
+		return FactoryProvider.getTypes();
+	}
+
+	public List<String> getAllFoodTypesOfMenu(String menuName) {
+		return FactoryProvider.getFoodTypes(menuName);
 	}
 }

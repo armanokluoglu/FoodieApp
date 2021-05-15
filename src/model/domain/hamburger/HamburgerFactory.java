@@ -8,6 +8,7 @@ import model.domain.hamburger.hamburgers.TurkeyBurger;
 import model.domain.hamburger.hamburgers.VeggieBurger;
 import model.utilities.ToppingPricePair;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HamburgerFactory implements FoodFactory {
@@ -15,16 +16,16 @@ public class HamburgerFactory implements FoodFactory {
     @Override
     public IHamburger create(String type, double burgerCost, List<ToppingPricePair> toppings) {
         IHamburger hamburger = null;
-        if (type.equalsIgnoreCase("bigmac")) {
+        if (containsIgnoreCase(type, "big mac") || containsIgnoreCase(type, "bigmac")) {
             hamburger = new BigMacHamburger(burgerCost);
         }
-        else if (type.equalsIgnoreCase("beef")) {
+        else if (containsIgnoreCase(type, "beef")) {
             hamburger = new BeefBurger(burgerCost);
         }
-        else if (type.equalsIgnoreCase("turkey")) {
+        else if (containsIgnoreCase(type, "turkey")) {
             hamburger = new TurkeyBurger(burgerCost);
         }
-        else if (type.equalsIgnoreCase("veggie")) {
+        else if (containsIgnoreCase(type, "veggie")) {
             hamburger = new VeggieBurger(burgerCost);
         }
         for (ToppingPricePair topping : toppings) {
@@ -49,4 +50,33 @@ public class HamburgerFactory implements FoodFactory {
         }
         return hamburger;
     }
+    
+    public static List<String> getFoodTypes() {
+		List<String> types = new ArrayList<>();
+		types.add("Beef Burger");
+		types.add("Big Mac Hamburger");
+		types.add("Turkey Burger");
+		types.add("Veggie Burger");
+		return types;
+	}
+    
+    private boolean containsIgnoreCase(String src, String what) {
+	    final int length = what.length();
+	    if (length == 0)
+	        return true;
+
+	    final char firstLo = Character.toLowerCase(what.charAt(0));
+	    final char firstUp = Character.toUpperCase(what.charAt(0));
+
+	    for (int i = src.length() - length; i >= 0; i--) {
+	        final char ch = src.charAt(i);
+	        if (ch != firstLo && ch != firstUp)
+	            continue;
+
+	        if (src.regionMatches(true, i, what, 0, length))
+	            return true;
+	    }
+
+	    return false;
+	}
 }

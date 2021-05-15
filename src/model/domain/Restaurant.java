@@ -2,6 +2,7 @@ package model.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import model.utilities.FoodCostPair;
 import model.utilities.Observer;
@@ -11,13 +12,16 @@ public class Restaurant extends User {
 
 	private List<Menu> menu;
 	private List<Observer> observers;
-	
-	public Restaurant(String name, String username, String password, String address, List<Order> orderHistory, List<Menu> menu) {
+
+	public Restaurant(String name, String username, String password, String address, List<Order> orderHistory,
+			List<Menu> menu) {
 		super(name, username, password, address, orderHistory);
 		this.menu = menu;
 		this.observers = new ArrayList<>();
 	}
-	public Restaurant(int id,String name, String username, String password, String address, List<Order> orderHistory, List<Menu> menu) {
+
+	public Restaurant(int id, String name, String username, String password, String address, List<Order> orderHistory,
+			List<Menu> menu) {
 		super(id, name, username, password, address, orderHistory);
 		this.menu = menu;
 		this.observers = new ArrayList<>();
@@ -32,11 +36,17 @@ public class Restaurant extends User {
 		notifyObservers();
 	}
 
+	public void addMenu(Menu newMenu) {
+		List<Menu> menu = getMenu();
+		menu.add(newMenu);
+		setMenu(menu);
+	}
+
 	@SuppressWarnings("unused")
-	public IFood createFood(String foodName, double cost, List<ToppingPricePair> toppings){
-		for(Menu menu:menu){
+	public IFood createFood(String foodName, double cost, List<ToppingPricePair> toppings) {
+		for (Menu menu : menu) {
 			for (FoodCostPair item : menu.getItems().keySet()) {
-				if(menu.getItems().keySet().contains(foodName)){
+				if (menu.getItems().keySet().contains(foodName)) {
 					FoodFactory factory = FactoryProvider.getFactory(menu.getName().replaceAll(" .*", ""));
 					IFood food = (IFood) factory.create(foodName, cost, toppings);
 					return food;
@@ -44,6 +54,22 @@ public class Restaurant extends User {
 			}
 		}
 		return null;
+	}
+
+	public void createFoodAndAddToMenu(String menuName, String foodName, double cost) {
+		for (Menu menu : menu) {
+			if (menu.getName().equalsIgnoreCase(menuName)) {
+				Map<FoodCostPair, List<ToppingPricePair>> items = menu.getItems();
+
+				FoodFactory factory = FactoryProvider.getFactory(menu.getName().replaceAll(" .*", ""));
+				IFood food = (IFood) factory.create(foodName, cost, new ArrayList<>());
+				FoodCostPair pair = new FoodCostPair(food);
+				
+				items.put(pair, new ArrayList<>());
+				menu.setItems(items);
+				notifyObservers();
+			}
+		}
 	}
 
 	@Override
@@ -77,5 +103,5 @@ public class Restaurant extends User {
 			observer.update();
 		}
 	}
-	
+
 }

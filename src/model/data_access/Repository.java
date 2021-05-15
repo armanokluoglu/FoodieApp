@@ -57,16 +57,23 @@ public class Repository {
 
 
 
-		pizzaMenu1.put(new FoodCostPair(4.4,"neapolitan"),Arrays.asList(toppingPricePair0,toppingPricePair10,toppingPricePair1,toppingPricePair2,toppingPricePair3));
-		pizzaMenu1.put(new FoodCostPair(4.2,"californian"), Arrays.asList(toppingPricePair0,toppingPricePair10,toppingPricePair1,toppingPricePair2,toppingPricePair3));
-		burgerMenu1.put(new FoodCostPair(2.5,"bigmac"), Arrays.asList(toppingPricePair4,toppingPricePair5,toppingPricePair6,toppingPricePair7,toppingPricePair8,toppingPricePair9));
-		burgerMenu1.put(new FoodCostPair(4.0,"turkey"), Arrays.asList(toppingPricePair4,toppingPricePair5,toppingPricePair6,toppingPricePair7,toppingPricePair8,toppingPricePair9));
+		pizzaMenu1.put(new FoodCostPair(4.4,"Neapolitan Pizza"),Arrays.asList(toppingPricePair0,toppingPricePair10,toppingPricePair1,toppingPricePair2,toppingPricePair3));
+		pizzaMenu1.put(new FoodCostPair(4.2,"Californian Pizza"), Arrays.asList(toppingPricePair0,toppingPricePair10,toppingPricePair1,toppingPricePair2,toppingPricePair3));
+		burgerMenu1.put(new FoodCostPair(2.5,"Big Mac Hamburger"), Arrays.asList(toppingPricePair4,toppingPricePair5,toppingPricePair6,toppingPricePair7,toppingPricePair8,toppingPricePair9));
+		burgerMenu1.put(new FoodCostPair(4.0,"Turkey Burger"), Arrays.asList(toppingPricePair4,toppingPricePair5,toppingPricePair6,toppingPricePair7,toppingPricePair8,toppingPricePair9));
 
 		Menu menu1 = new Menu("Pizza Menu",pizzaMenu1);
 		Menu menu2 = new Menu("Burger Menu",burgerMenu1);
 
-		User restaurant = new Restaurant("Calipso","calipso","1234","gülbahçe",new ArrayList<>(), Arrays.asList(menu1,menu2));
-		User restaurant2 = new Restaurant("Calipso2","calipso2","1234","gülbahçe",new ArrayList<>(), Arrays.asList(menu1));
+		List<Menu> menus1 = new ArrayList<>();
+		menus1.add(menu1);
+		menus1.add(menu2);
+		
+		List<Menu> menus2 = new ArrayList<>();
+		menus2.add(menu1);
+		
+		User restaurant = new Restaurant("Calipso","calipso","1234","gülbahçe",new ArrayList<>(), menus1);
+		User restaurant2 = new Restaurant("Calipso2","calipso2","1234","gülbahçe",new ArrayList<>(), menus2);
 		
 		User customer = new Customer("Arman Okluoğlu","armanokluoglu","1234","Adres falan filan",new ArrayList<>());
 		User customer2 = new Customer("customer2","3535","1234","gülbahçe23",new ArrayList<>());

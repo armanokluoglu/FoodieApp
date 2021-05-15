@@ -11,7 +11,6 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -21,7 +20,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-
 import model.domain.Menu;
 import model.domain.Restaurant;
 import model.domain.User;
@@ -42,16 +40,21 @@ public class RestaurantProfileFrame extends JFrame implements Observer {
 
 	private JButton logoutButton;
 	private JButton orderHistoryButton;
+	private JButton createMenuButton;
 
 	private JButton changeNameButton;
 	private JButton changeUsernameButton;
 	private JButton changeAddressButton;
 	private List<JButton> foodButtons;
+	private List<JButton> removeMenuButtons;
+	private List<JButton> addItemButtons;
 
 	public RestaurantProfileFrame(FrameManager fm, User currentRestaurant) {
 		this.fm = fm;
 		this.currentRestaurant = currentRestaurant;
 		this.foodButtons = new ArrayList<>();
+		this.removeMenuButtons = new ArrayList<>();
+		this.addItemButtons = new ArrayList<>();
 		
 		currentRestaurant.register(this);
 
@@ -132,6 +135,8 @@ public class RestaurantProfileFrame extends JFrame implements Observer {
 		this.changeAddressButton = changeAddressButton;
 		
 		JLabel menuLabel = new JLabel("<html><FONT SIZE=5 COLOR=GREEN>MENU</FONT></html>");
+		JButton createMenuButton = new JButton("Create New Menu");
+		this.createMenuButton = createMenuButton;
 		
 		panel.add(restaurantName, gbc);
 		panel.add(changeNameButton, gbc);
@@ -139,19 +144,37 @@ public class RestaurantProfileFrame extends JFrame implements Observer {
 		panel.add(changeUsernameButton, gbc);
 		panel.add(restaurantAddress, gbc);
 		panel.add(changeAddressButton, gbc);
-		panel.add(menuLabel, gbc);
+		
+		JPanel menuTitlePanel = new JPanel();
+		menuTitlePanel.add(menuLabel);
+		menuTitlePanel.add(createMenuButton);
+		panel.add(menuTitlePanel, gbc);
 		
 		List<Menu> menu = restaurant.getMenu();
+		
 		for (Menu submenu : menu) {
 			JPanel submenuPanel = new JPanel(new GridBagLayout());
 			JLabel submenuName = new JLabel("<html><FONT SIZE=5 COLOR=RED>" + submenu.getName() + "</FONT></html>");
 			
-			submenuPanel.add(submenuName, gbc);
+			JButton removeMenuButton = new JButton("Remove This Menu");
+			removeMenuButton.setName(submenu.getName());
+			removeMenuButtons.add(removeMenuButton);
+			
+			JButton addItemButton = new JButton("Add Item To Menu");
+			addItemButton.setName(submenu.getName());
+			addItemButtons.add(addItemButton);
+			
+			JPanel submenuTitlePanel = new JPanel();
+			submenuTitlePanel.add(addItemButton);
+			submenuTitlePanel.add(submenuName);
+			submenuTitlePanel.add(removeMenuButton);
+			submenuPanel.add(submenuTitlePanel, gbc);
+			submenuPanel.setBorder(new RoundedLineBorder(Color.BLACK, 1, 10, true));
 
 			Map<FoodCostPair, List<ToppingPricePair>> items = submenu.getItems();
 			for (FoodCostPair item : items.keySet()) {
 				JButton foodButton = new JButton();
-				ImageIcon icon = new ImageIcon("assets/" + item + ".jpg");
+				ImageIcon icon = new ImageIcon("assets/" + item.getFood().toLowerCase() + ".jpg");
 
 				foodButton.setName(item.getFood());
 				foodButton.setIcon(icon);
@@ -160,23 +183,34 @@ public class RestaurantProfileFrame extends JFrame implements Observer {
 				foodButtons.add(foodButton);
 				submenuPanel.add(foodButton, gbc);
 				
-				JLabel itemName = new JLabel("<html><FONT SIZE=4 COLOR=RED>" + toTitleCase(item.getFood()) + "</FONT></html>");
+				JLabel itemName = new JLabel("<html><FONT SIZE=4><FONT COLOR=RED>" + toTitleCase(item.getFood()) + "</FONT> $" + item.getCost() + "</FONT></html>");
+				submenuPanel.add(itemName, gbc);
 				
+				String toppings = "None";
 				List<ToppingPricePair> itemToppings = items.get(item);
-				String toppings = "";
-				for (ToppingPricePair topping : itemToppings) {
-					toppings += toTitleCase(topping.getTopping()) + ", ";
+				if(itemToppings.size() > 0) {
+					toppings = "";
+					for (ToppingPricePair topping : itemToppings) {
+						toppings += toTitleCase(topping.getTopping()) + ", ";
+					}
+					toppings = toppings.substring(0, toppings.length() - 2);
 				}
-				toppings = toppings.substring(0, toppings.length() - 2);
+				
 				JLabel availableToppings = new JLabel("<html><FONT SIZE=3 COLOR=RED>Available Toppings: </FONT>" + toppings + "</html>");
 				availableToppings.setBorder(BorderFactory.createEmptyBorder(0, 0, 40, 0));
-				
-				submenuPanel.add(itemName, gbc);
 				submenuPanel.add(availableToppings, gbc);
-				submenuPanel.setBorder(new RoundedLineBorder(Color.BLACK, 1, 10, true));
+				
+			}
+			
+			if (items.keySet().size() == 0) {
+				submenuPanel.add(new JLabel("<html><FONT SIZE=4 COLOR=RED>This menu does not have any items right now.</FONT></html>"), gbc);
 			}
 			
 			panel.add(submenuPanel, gbc);
+		}
+		
+		if (menu.size() == 0) {
+			panel.add(new JLabel("<html><FONT SIZE=4 COLOR=RED>This restaurant does not have any menus right now.</FONT></html>"), gbc);
 		}
 
 		content.removeAll();
@@ -184,13 +218,25 @@ public class RestaurantProfileFrame extends JFrame implements Observer {
 		getFrameManager().setNewPanel(mainPanel, "restaurant_profile");
 	}
 
-//	public void addOpenCollectionActionListener(ActionListener actionListener, String collectionName) {
-//		for (JButton jButton : collectionButtons) {
-//			if (jButton.getText().equals(collectionName)) {
-//				jButton.addActionListener(actionListener);
-//			}
-//		}
-//	}
+	public void addRemoveMenuActionListener(ActionListener actionListener, String menuName) {
+		for (JButton jButton : removeMenuButtons) {
+			if (jButton.getName().equals(menuName)) {
+				jButton.addActionListener(actionListener);
+			}
+		}
+	}
+	
+	public void addNewItemActionListener(ActionListener actionListener, String menuName) {
+		for (JButton jButton : addItemButtons) {
+			if (jButton.getName().equals(menuName)) {
+				jButton.addActionListener(actionListener);
+			}
+		}
+	}
+	
+	public void addCreateMenuActionListener(ActionListener actionListener) {
+		createMenuButton.addActionListener(actionListener);
+	}
 	
 	public void addChangeNameActionListener(ActionListener actionListener) {
 		changeNameButton.addActionListener(actionListener);
@@ -222,6 +268,11 @@ public class RestaurantProfileFrame extends JFrame implements Observer {
 
 	public String showInputDialog(String message) {
 		return JOptionPane.showInputDialog(getFrameManager().getFrame(), message);
+	}
+	
+	public Object showSelectDialog(String message, Object[] choices) {
+		return JOptionPane.showInputDialog(getFrameManager().getFrame(), message, null, JOptionPane.QUESTION_MESSAGE,
+				null, choices, choices[0]);
 	}
 	
 	private String toTitleCase(String givenString) {

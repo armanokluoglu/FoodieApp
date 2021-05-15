@@ -2,10 +2,18 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import model.domain.FoodieService;
+import model.domain.Menu;
+import model.domain.Restaurant;
 import model.domain.User;
+import model.utilities.FoodCostPair;
 import model.utilities.Observer;
 import model.utilities.Subject;
+import model.utilities.ToppingPricePair;
 import view.RestaurantProfileFrame;
 
 public class RestaurantProfileController implements Observer {
@@ -36,7 +44,112 @@ public class RestaurantProfileController implements Observer {
 		view.addChangeNameActionListener(new ChangeNameListener());
 		view.addChangeUsernameActionListener(new ChangeUsernameListener());
 		view.addChangeAddressActionListener(new ChangeAddressListener());
+		view.addCreateMenuActionListener(new CreateMenuListener());
+		List<Menu> menu = ((Restaurant) currentRestaurant).getMenu();
+		for (Menu submenu : menu) {
+			view.addRemoveMenuActionListener(new RemoveMenuListener(submenu.getName()), submenu.getName());
+			view.addNewItemActionListener(new AddItemListener(submenu.getName()), submenu.getName());
+		}
 	}
+	
+	class RemoveMenuListener implements ActionListener {
+		private String menuName;
+		
+		public RemoveMenuListener(String menuName) {
+			this.menuName = menuName;
+		}
+		
+        public void actionPerformed(ActionEvent e) {
+			((FoodieService) model).removeMenuFromRestaurant(menuName, (Restaurant) currentRestaurant);
+        }
+    }
+	
+	class AddItemListener implements ActionListener {
+		private String menuName;
+		
+		public AddItemListener(String menuName) {
+			this.menuName = menuName;
+		}
+		
+        public void actionPerformed(ActionEvent e) {
+        	List<Menu> menu = ((Restaurant) currentRestaurant).getMenu();
+        	List<String> allFoodTypes = ((FoodieService) model).getAllFoodTypesOfMenu(menuName.replace(" Menu", ""));
+    		List<String> joint = new ArrayList<>();
+			
+			outerLoop:
+			for (int i = 0; i < allFoodTypes.size(); i++) {
+				String type = allFoodTypes.get(i);
+				for (Menu submenu : menu) {
+					Map<FoodCostPair, List<ToppingPricePair>> items = submenu.getItems();
+					for (FoodCostPair item : items.keySet()) {
+						if (item.getFood().equalsIgnoreCase(type)) {
+		    				continue outerLoop;
+		    			}
+					}
+	    			
+	    		}
+				joint.add(type);
+			}
+			String[] choices = joint.stream().toArray(String[]::new);
+			
+			if (choices.length == 0) {
+				view.showMessage("No different item to add.");
+			} else {
+				Object item = (view.showSelectDialog("Choose an item to add: ", choices));
+				if (item == null || item == "") {
+					return;
+				}
+				
+				Object cost = (view.showInputDialog("Enter the price of the item: "));
+				if (cost == null || cost == "") {
+					return;
+				}
+				
+				try {
+					((FoodieService) model).addFoodToMenuOfRestaurant(menuName, item.toString(), Double.parseDouble(cost.toString()), (Restaurant) currentRestaurant);
+				} catch (IllegalStateException e1) {
+					view.showMessage(e1.getMessage());
+					return;
+				}
+			}
+        }
+    }
+	
+	class CreateMenuListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+        	List<Menu> menu = ((Restaurant) currentRestaurant).getMenu();
+        	List<String> allMenuTypes = ((FoodieService) model).getAllMenuTypes();
+        	List<String> joint = new ArrayList<>();
+			
+			outerLoop:
+			for (int i = 0; i < allMenuTypes.size(); i++) {
+				String type = allMenuTypes.get(i);
+				for (Menu submenu : menu) {
+	    			if (submenu.getName().replace(" Menu", "").equals(type)) {
+	    				continue outerLoop;
+	    			}
+	    		}
+				joint.add(type);
+			}
+			String[] choices = joint.stream().toArray(String[]::new);
+			
+			if (choices.length == 0) {
+				view.showMessage("No different menu type to add.");
+			} else {
+				Object response = (view.showSelectDialog("Choose a menu to add:", choices));
+				if (response == null || response == "") {
+					return;
+				}
+				String menuName = response.toString();
+				try {
+					((FoodieService) model).createMenuForRestaurant(menuName, (Restaurant) currentRestaurant);
+				} catch (IllegalStateException e1) {
+					view.showMessage(e1.getMessage());
+					return;
+				}
+			}
+        }
+    }
 	
 	class ChangeNameListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {

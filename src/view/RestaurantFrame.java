@@ -149,7 +149,7 @@ public class RestaurantFrame extends JFrame implements Observer {
 				foodButtons.add(foodButton);
 				submenuPanel.add(foodButton, gbc);
 				
-				JLabel itemName = new JLabel("<html><FONT SIZE=4 COLOR=RED>" + toTitleCase(item.getFood()) + " " + item.getCost() + "$" + "</FONT></html>");
+				JLabel itemName = new JLabel("<html><FONT SIZE=4><FONT COLOR=RED>" + toTitleCase(item.getFood()) + "</FONT> $" + item.getCost() + "</FONT></html>");
 				
 				List<ToppingPricePair> itemToppings = items.get(item);
 				String toppings = "";
