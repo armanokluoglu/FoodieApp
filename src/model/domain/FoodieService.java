@@ -152,4 +152,8 @@ public class FoodieService implements Observer, Subject {
 	public List<String> getAllFoodTypesOfMenu(String menuName) {
 		return FactoryProvider.getFoodTypes(menuName);
 	}
+
+	public void removeItemInMenuFromRestaurant(String menuName, String itemName, Restaurant currentRestaurant) {
+		currentRestaurant.removeFoodFromMenu(menuName, itemName);
+	}
 }

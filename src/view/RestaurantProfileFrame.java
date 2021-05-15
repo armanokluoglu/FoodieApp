@@ -48,6 +48,7 @@ public class RestaurantProfileFrame extends JFrame implements Observer {
 	private List<JButton> foodButtons;
 	private List<JButton> removeMenuButtons;
 	private List<JButton> addItemButtons;
+	private List<JButton> removeItemButtons;
 
 	public RestaurantProfileFrame(FrameManager fm, User currentRestaurant) {
 		this.fm = fm;
@@ -55,6 +56,7 @@ public class RestaurantProfileFrame extends JFrame implements Observer {
 		this.foodButtons = new ArrayList<>();
 		this.removeMenuButtons = new ArrayList<>();
 		this.addItemButtons = new ArrayList<>();
+		this.removeItemButtons = new ArrayList<>();
 		
 		currentRestaurant.register(this);
 
@@ -173,6 +175,10 @@ public class RestaurantProfileFrame extends JFrame implements Observer {
 
 			Map<FoodCostPair, List<ToppingPricePair>> items = submenu.getItems();
 			for (FoodCostPair item : items.keySet()) {
+				JButton removeItemButton = new JButton("Remove This Item");
+				removeItemButton.setName(item.getFood());
+				removeItemButtons.add(removeItemButton);
+				
 				JButton foodButton = new JButton();
 				ImageIcon icon = new ImageIcon("assets/" + item.getFood().toLowerCase() + ".jpg");
 
@@ -181,7 +187,9 @@ public class RestaurantProfileFrame extends JFrame implements Observer {
 				foodButton.setBackground(java.awt.Color.WHITE);
 				foodButton.setPreferredSize(new Dimension(300, 300));
 				foodButtons.add(foodButton);
+				
 				submenuPanel.add(foodButton, gbc);
+				submenuPanel.add(removeItemButton, gbc);
 				
 				JLabel itemName = new JLabel("<html><FONT SIZE=4><FONT COLOR=RED>" + toTitleCase(item.getFood()) + "</FONT> $" + item.getCost() + "</FONT></html>");
 				submenuPanel.add(itemName, gbc);
@@ -221,6 +229,14 @@ public class RestaurantProfileFrame extends JFrame implements Observer {
 	public void addRemoveMenuActionListener(ActionListener actionListener, String menuName) {
 		for (JButton jButton : removeMenuButtons) {
 			if (jButton.getName().equals(menuName)) {
+				jButton.addActionListener(actionListener);
+			}
+		}
+	}
+	
+	public void addRemoveItemActionListener(ActionListener actionListener, String itemName) {
+		for (JButton jButton : removeItemButtons) {
+			if (jButton.getName().equals(itemName)) {
 				jButton.addActionListener(actionListener);
 			}
 		}

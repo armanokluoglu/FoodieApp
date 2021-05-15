@@ -49,6 +49,10 @@ public class RestaurantProfileController implements Observer {
 		for (Menu submenu : menu) {
 			view.addRemoveMenuActionListener(new RemoveMenuListener(submenu.getName()), submenu.getName());
 			view.addNewItemActionListener(new AddItemListener(submenu.getName()), submenu.getName());
+			Map<FoodCostPair, List<ToppingPricePair>> items = submenu.getItems();
+			for (FoodCostPair item : items.keySet()) {
+				view.addRemoveItemActionListener(new RemoveItemListener(submenu.getName(), item.getFood()), item.getFood());
+			}
 		}
 	}
 	
@@ -61,6 +65,20 @@ public class RestaurantProfileController implements Observer {
 		
         public void actionPerformed(ActionEvent e) {
 			((FoodieService) model).removeMenuFromRestaurant(menuName, (Restaurant) currentRestaurant);
+        }
+    }
+	
+	class RemoveItemListener implements ActionListener {
+		private String menuName;
+		private String itemName;
+		
+		public RemoveItemListener(String menuName, String itemName) {
+			this.menuName = menuName;
+			this.itemName = itemName;
+		}
+		
+        public void actionPerformed(ActionEvent e) {
+        	((FoodieService) model).removeItemInMenuFromRestaurant(menuName, itemName, (Restaurant) currentRestaurant);
         }
     }
 	

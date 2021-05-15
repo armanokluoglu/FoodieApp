@@ -57,17 +57,33 @@ public class Restaurant extends User {
 	}
 
 	public void createFoodAndAddToMenu(String menuName, String foodName, double cost) {
-		for (Menu menu : menu) {
-			if (menu.getName().equalsIgnoreCase(menuName)) {
-				Map<FoodCostPair, List<ToppingPricePair>> items = menu.getItems();
+		for (Menu submenu : menu) {
+			if (submenu.getName().equalsIgnoreCase(menuName)) {
+				Map<FoodCostPair, List<ToppingPricePair>> items = submenu.getItems();
 
-				FoodFactory factory = FactoryProvider.getFactory(menu.getName().replaceAll(" .*", ""));
+				FoodFactory factory = FactoryProvider.getFactory(submenu.getName().replaceAll(" .*", ""));
 				IFood food = (IFood) factory.create(foodName, cost, new ArrayList<>());
 				FoodCostPair pair = new FoodCostPair(food);
 				
 				items.put(pair, new ArrayList<>());
-				menu.setItems(items);
+				submenu.setItems(items);
 				notifyObservers();
+			}
+		}
+	}
+	
+	public void removeFoodFromMenu(String menuName, String foodName) {
+		List<Menu> menu = getMenu();
+		for (Menu submenu : menu) {
+			if (submenu.getName().equals(menuName)) {
+				Map<FoodCostPair, List<ToppingPricePair>> items = submenu.getItems();
+				for (FoodCostPair pair : items.keySet()) {
+					if (pair.getFood().equalsIgnoreCase(foodName)) {
+						items.remove(pair);
+						notifyObservers();
+						return;
+					}
+				}
 			}
 		}
 	}
