@@ -33,7 +33,7 @@ public class RestaurantsController {
 	private void setContentListeners() {
 		List<User> restaurants = ((FoodieService) model).getAllRestaurants();
 		for (User restaurant : restaurants) {
-			view.addOpenRestaurantActionListener(new OpenRestaurantListener(restaurant));
+			view.addOpenRestaurantActionListener(new OpenRestaurantListener(restaurant),restaurant.getName());
 		}
 	}
 

@@ -125,6 +125,7 @@ public class RestaurantsFrame extends JFrame implements Observer {
 			String restaurantName = restaurant.getName();
 
 			JButton restaurantButton = new JButton(restaurantName);
+			restaurantButton.setName(restaurant.getName());
 			restaurantButtons.add(restaurantButton);
 
 			panel.setPreferredSize(new Dimension(350, 70));
@@ -142,9 +143,10 @@ public class RestaurantsFrame extends JFrame implements Observer {
 		}
 	}
 
-	public void addOpenRestaurantActionListener(ActionListener actionListener) {
+	public void addOpenRestaurantActionListener(ActionListener actionListener,String name) {
 		for (JButton jButton : restaurantButtons) {
-			jButton.addActionListener(actionListener);
+			if(jButton.getName().equals(name))
+				jButton.addActionListener(actionListener);
 		}
 	}
 

@@ -102,8 +102,8 @@ public class IO {
     private List<Menu> nodeToMenus(Node menusNode){
         List<Menu> menuList = new ArrayList<>();
         NodeList nList = menusNode.getChildNodes();
-        Map<FoodCostPair,List<ToppingPricePair>> menuMap = new HashMap<>();
         for (int temp = 0; temp < nList.getLength(); temp++) {
+            Map<FoodCostPair,List<ToppingPricePair>> menuMap = new HashMap<>();
             Node nNode = nList.item(temp);
             if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                 Element eElement = (Element) nNode;
@@ -111,7 +111,8 @@ public class IO {
                 String menuName = eElement.getElementsByTagName("Name").item(0).getTextContent();
 
                 Node itemsNode = eElement.getElementsByTagName("Items").item(0);
-                menuMap = nodeToMenuItems(menuMap,itemsNode);
+                if(itemsNode!=null)
+                    menuMap = nodeToMenuItems(menuMap,itemsNode);
                 Menu menu = new Menu(id,menuName,menuMap);
                 menuList.add(menu);
             }
@@ -136,7 +137,8 @@ public class IO {
                     for (String s : values)
                         try {
                             String[] nameCost = s.split(":");
-                            ingredientsList.add(new ToppingPricePair(Double.valueOf(nameCost[1]),nameCost[0]));
+                            if(nameCost.length>1)
+                                ingredientsList.add(new ToppingPricePair(Double.valueOf(nameCost[1]),nameCost[0]));
                         } catch (NumberFormatException e) {
                             ingredientsList = new ArrayList<>();
                         }

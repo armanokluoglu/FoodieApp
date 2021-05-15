@@ -88,7 +88,6 @@ public class FoodController implements Observer {
 				for (FoodCostPair pair : items.keySet()) {
 					if (pair.getFood().equalsIgnoreCase(food)) {
 						foodCost = pair.getCost();
-						return;
 					}
 				}
 			}

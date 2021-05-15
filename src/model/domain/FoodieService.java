@@ -30,11 +30,11 @@ public class FoodieService implements Observer, Subject {
 	}
 
 	public void outputData(){
-		//repo.output();
+		repo.outputData();
 	}
 	
 	public User login(String username, String password) throws IllegalArgumentException, IllegalStateException {
-		username = "calipso";
+		username = "armanokluoglu";
 		password = "1234";
 		User user = repo.findUserByUsername(username);
 		if (!user.getPassword().equals(password)) {
@@ -45,14 +45,17 @@ public class FoodieService implements Observer, Subject {
 	
 	public void changeNameOfUser(String newName, User currentUser) {
 		currentUser.setName(newName);
+		outputData();
 	}
 
 	public void changeUsernameOfUser(String newUsername, User currentUser) {
 		currentUser.setUsername(newUsername);
+		outputData();
 	}
 
 	public void changeAddressOfUser(String newAddress, User currentUser) {
 		currentUser.setAddress(newAddress);
+		outputData();
 	}
 	
 	public List<User> getAllRestaurants() {
@@ -135,15 +138,18 @@ public class FoodieService implements Observer, Subject {
 			}
 		}
 		currentRestaurant.setMenu(menu);
+		outputData();
 	}
 	
 	public void addFoodToMenuOfRestaurant(String menuName, String foodName, double foodCost, Restaurant currentRestaurant) {
 		currentRestaurant.createFoodAndAddToMenu(menuName, foodName, foodCost);
+		outputData();
 	}
 
 	public void createMenuForRestaurant(String menuName, Restaurant restaurant) {
 		Menu menu = new Menu(menuName + " Menu", new HashMap<>());
 		restaurant.addMenu(menu);
+		outputData();
 	}
 
 	public List<String> getAllMenuTypes() {
@@ -156,18 +162,22 @@ public class FoodieService implements Observer, Subject {
 
 	public void removeItemInMenuFromRestaurant(String menuName, String itemName, Restaurant restaurant) {
 		restaurant.removeFoodFromMenu(menuName, itemName);
+		outputData();
 	}
 
 	public void changeToppingCostForFoodForRestaurant(ToppingPricePair topping, String food, double cost, Restaurant restaurant) {
 		restaurant.changeToppingCostForFood(topping, food, cost);
+		outputData();
 	}
 
 	public void removeToppingFromFoodForRestaurant(ToppingPricePair topping, String food, Restaurant restaurant) {
 		restaurant.removeToppingFromFood(topping, food);
+		outputData();
 	}
 
 	public void changeFoodCostForRestaurant(String food, double cost, Restaurant restaurant) {
 		restaurant.changeCostForFood(food, cost);
+		outputData();
 	}
 
 	public List<String> getAllToppingsOfMenu(String menu) {
@@ -176,5 +186,6 @@ public class FoodieService implements Observer, Subject {
 
 	public void addToppingToFoodOfRestaurant(String food, String topping, double cost, Restaurant restaurant) {
 		restaurant.addToppingToFood(topping, food, cost);
+		outputData();
 	}
 }

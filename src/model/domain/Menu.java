@@ -3,6 +3,7 @@ package model.domain;
 import model.utilities.FoodCostPair;
 import model.utilities.ToppingPricePair;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -46,5 +47,12 @@ public class Menu {
 
 	public void setItems(Map<FoodCostPair, List<ToppingPricePair>> items) {
 		this.items = items;
+	}
+
+	public List<String> getItemNames(){
+		List<String> itemNames= new ArrayList<>();
+		for(FoodCostPair item : getItems().keySet())
+			itemNames.add(item.getFood());
+		return itemNames;
 	}
 }

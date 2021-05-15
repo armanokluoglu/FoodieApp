@@ -46,7 +46,7 @@ public class Restaurant extends User {
 	public IFood createFood(String foodName, double cost, List<ToppingPricePair> toppings) {
 		for (Menu menu : menu) {
 			for (FoodCostPair item : menu.getItems().keySet()) {
-				if (menu.getItems().keySet().contains(foodName)) {
+				if (menu.getItemNames().contains(foodName)) {
 					FoodFactory factory = FactoryProvider.getFactory(menu.getName().replaceAll(" .*", ""));
 					IFood food = (IFood) factory.create(foodName, cost, toppings);
 					return food;

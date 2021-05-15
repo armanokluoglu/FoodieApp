@@ -224,8 +224,8 @@ public class FoodFrame extends JFrame implements Observer {
 			bgroup.add(noButton);
 			// ... Arrange buttons vertically in a panel
 			JPanel radioPanel = new JPanel();
-			yesButton.setName(topping + "Select");
-			noButton.setName(topping + "UnSelect");
+			yesButton.setName(topping.getTopping() + "Select");
+			noButton.setName(topping.getTopping() + "UnSelect");
 			radioPanel.setLayout(new GridLayout(1, 2));
 			radioPanel.add(yesButton);
 			radioPanel.add(noButton);
