@@ -92,7 +92,7 @@ public class FoodController implements Observer {
 				}
 			}
 			IFood cartFood = ((Restaurant) restaurant).createFood(food, foodCost, selectedToppings);
-			((Customer) session.getCurrentUser()).addItemToOrder(cartFood);
+			model.addToCart(session.getCurrentUser(), cartFood);
 			session.restaurantPage(restaurant);
 		}
 	}

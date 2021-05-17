@@ -3,7 +3,6 @@ package controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
-
 import model.domain.Customer;
 import model.domain.FoodieService;
 import model.domain.User;
@@ -45,8 +44,17 @@ public class RestaurantsController {
 		}
 		
 		public void actionPerformed(ActionEvent e) {
-			((Customer)session.getCurrentUser()).initializeOrder(restaurant.getName());
-			session.restaurantPage(restaurant);
+			Customer customer = (Customer) session.getCurrentUser();
+			if (customer.getCurrentOrder() != null && customer.getCurrentOrder().getItems().size() > 0 && !customer.getCurrentOrder().getRestaurantName().equals(restaurant.getName())) {
+				int result = view.showConfirmDialog("If you proceed to this restaurant, your shopping cart will be reset. Do you want to continue?", "idk");
+				if (result == 0) {
+					model.initializeOrder(session.getCurrentUser(), restaurant.getName());
+					session.restaurantPage(restaurant);
+				}
+			} else {
+				model.initializeOrder(session.getCurrentUser(), restaurant.getName());
+				session.restaurantPage(restaurant);
+			}
 		}
 	}
 	

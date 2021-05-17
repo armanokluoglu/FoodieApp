@@ -34,14 +34,25 @@ public class FoodieService implements Observer, Subject {
 	}
 	
 	public User login(String username, String password) throws IllegalArgumentException, IllegalStateException {
-		username = "armanokluoglu";
-		password = "1234";
 		User user = repo.findUserByUsername(username);
 		if (!user.getPassword().equals(password)) {
 			throw new IllegalArgumentException("Invalid password.");
 		}
 		return user;
 	}
+	
+	public void initializeOrder(User customer, String restaurantName){
+		Customer user = (Customer) customer;
+		if (user.getCurrentOrder() != null && !user.getCurrentOrder().getRestaurantName().equals(restaurantName)) {
+			user.initializeOrder(restaurantName);
+		}
+		outputData();
+	 }
+	
+	public void addToCart(User customer, IFood cartFood){
+	    ((Customer) customer).addItemToOrder(cartFood);
+	    outputData();
+	 }
 	
 	public void changeNameOfUser(String newName, User currentUser) {
 		currentUser.setName(newName);

@@ -170,6 +170,11 @@ public class RestaurantsFrame extends JFrame implements Observer {
 		JOptionPane.showMessageDialog(getFrameManager().getFrame(), message);
 	}
 
+	public int showConfirmDialog(String message, String title) {
+		int dialogButton = JOptionPane.YES_NO_OPTION;
+		return JOptionPane.showConfirmDialog(getFrameManager().getFrame(), message, title, dialogButton);
+	}
+	
 	@Override
 	public void update() {
 		setContent();

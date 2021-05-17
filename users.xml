@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Users xmlns="CENG431">
+    <User id="1">
+        <Type>restaurant</Type>
+        <Name>Calipso</Name>
+        <UserName>calipso</UserName>
+        <Password>1234</Password>
+        <Address>gülbahçe</Address>
+        <Orders>
+            <Order id="1">
+                <CustomerName>customer1</CustomerName>
+                <RestaurantName>calipso</RestaurantName>
+                <Address>adress</Address>
+                <Date>2021-45-15 09:45:41</Date>
+                <Foods>
+                    <Food id="1">
+                        <Cost>3.1</Cost>
+                        <Food>Big Mac Hamburger + Mayonnaise + Cheese + Pickles</Food>
+                    </Food>
+                    <Food id="2">
+                        <Cost>5.0</Cost>
+                        <Food>Neapolitan Pizza + Pepperoni + Mushroom + Olive</Food>
+                    </Food>
+                </Foods>
+            </Order>
+            <Order id="2">
+                <CustomerName>customer2</CustomerName>
+                <RestaurantName>calipso</RestaurantName>
+                <Address>adress</Address>
+                <Date>2021-45-15 09:45:41</Date>
+                <Foods>
+                    <Food id="1">
+                        <Cost>4.8</Cost>
+                        <Food>Turkey Burger + Mayonnaise + Cheese + Pickles + Tomato</Food>
+                    </Food>
+                    <Food id="2">
+                        <Cost>5.0</Cost>
+                        <Food>Neapolitan Pizza + Pepperoni + Mushroom + Olive</Food>
+                    </Food>
+                </Foods>
+            </Order>
+            <Order id="3">
+                <CustomerName>customer3</CustomerName>
+                <RestaurantName>calipso</RestaurantName>
+                <Address>adress</Address>
+                <Date>2021-45-15 09:45:41</Date>
+                <Foods>
+                    <Food id="1">
+                        <Cost>3.1</Cost>
+                        <Food>Big Mac Hamburger + Mayonnaise + Cheese + Pickles</Food>
+                    </Food>
+                    <Food id="2">
+                        <Cost>4.8</Cost>
+                        <Food>Californian Pizza + Pepperoni + Mushroom + Olive</Food>
+                    </Food>
+                </Foods>
+            </Order>
+            <Order id="4">
+                <CustomerName>customer4</CustomerName>
+                <RestaurantName>calipso</RestaurantName>
+                <Address>adress</Address>
+                <Date>2021-45-15 09:45:41</Date>
+                <Foods>
+                    <Food id="1">
+                        <Cost>3.1</Cost>
+                        <Food>Big Mac Hamburger + Mayonnaise + Cheese + Pickles</Food>
+                    </Food>
+                    <Food id="2">
+                        <Cost>4.8</Cost>
+                        <Food>Californian Pizza + Pepperoni + Mushroom + Olive</Food>
+                    </Food>
+                    <Food id="3">
+                        <Cost>5.0</Cost>
+                        <Food>Neapolitan Pizza + Pepperoni + Mushroom + Olive</Food>
+                    </Food>
+                </Foods>
+            </Order>
+            <Order id="5">
+                <CustomerName>customer5</CustomerName>
+                <RestaurantName>calipso</RestaurantName>
+                <Address>adress</Address>
+                <Date>2021-45-15 09:45:41</Date>
+                <Foods>
+                    <Food id="1">
+                        <Cost>4.8</Cost>
+                        <Food>Turkey Burger + Mayonnaise + Cheese + Pickles + Tomato</Food>
+                    </Food>
+                    <Food id="2">
+                        <Cost>4.0</Cost>
+                        <Food>New York Style Pizza + Pepperoni + Mushroom + Olive</Food>
+                    </Food>
+                </Foods>
+            </Order>
+        </Orders>
+        <Menus>
+            <Menu id="0">
+                <Name>Pizza Menu</Name>
+                <Items>
+                    <Item id="0">
+                        <Name>Californian Pizza</Name>
+                        <Cost>4.2</Cost>
+                        <Ingredients>pepperoni:0.2 mozarella:0.2 mushroom:0.3 olive:0.1 corn:0.6</Ingredients>
+                    </Item>
+                    <Item id="1">
+                        <Name>Neapolitan Pizza</Name>
+                        <Cost>4.4</Cost>
+                        <Ingredients>pepperoni:0.2 mozarella:0.2 mushroom:0.3 olive:0.1 corn:0.6</Ingredients>
+                    </Item>
+                </Items>
+            </Menu>
+            <Menu id="1">
+                <Name>Burger Menu</Name>
+                <Items>
+                    <Item id="0">
+                        <Name>Big Mac Hamburger</Name>
+                        <Cost>2.5</Cost>
+                        <Ingredients>mayonnaise:0.2 cheese:0.3 pickles:0.1 lettuce:0.4 onion:0.3 tomato:0.2</Ingredients>
+                    </Item>
+                    <Item id="1">
+                        <Name>Turkey Burger</Name>
+                        <Cost>4.0</Cost>
+                        <Ingredients>mayonnaise:0.2 cheese:0.3 pickles:0.1 lettuce:0.4 onion:0.3 tomato:0.2</Ingredients>
+                    </Item>
+                </Items>
+            </Menu>
+        </Menus>
+    </User>
+    <User id="2">
+        <Type>restaurant</Type>
+        <Name>Calipso2</Name>
+        <UserName>calipso2</UserName>
+        <Password>1234</Password>
+        <Address>gülbahçe</Address>
+        <Orders/>
+        <Menus>
+            <Menu id="0">
+                <Name>Pizza Menu</Name>
+                <Items>
+                    <Item id="0">
+                        <Name>Californian Pizza</Name>
+                        <Cost>4.2</Cost>
+                        <Ingredients>pepperoni:0.2 mozarella:0.2 mushroom:0.3 olive:0.1 corn:0.6</Ingredients>
+                    </Item>
+                    <Item id="1">
+                        <Name>Neapolitan Pizza</Name>
+                        <Cost>4.4</Cost>
+                        <Ingredients>pepperoni:0.2 mozarella:0.2 mushroom:0.3 olive:0.1 corn:0.6</Ingredients>
+                    </Item>
+                </Items>
+            </Menu>
+        </Menus>
+    </User>
+    <User id="3">
+        <Type>customer</Type>
+        <Name>Arman Okluoğlu</Name>
+        <UserName>arman</UserName>
+        <Password>1234</Password>
+        <Address>Adres falan filan</Address>
+        <Orders>
+            <Order id="1">
+                <CustomerName>customer1</CustomerName>
+                <RestaurantName>calipso</RestaurantName>
+                <Address>adress</Address>
+                <Date>2021-45-15 09:45:41</Date>
+                <Foods>
+                    <Food id="1">
+                        <Cost>3.1</Cost>
+                        <Food>Big Mac Hamburger + Mayonnaise + Cheese + Pickles</Food>
+                    </Food>
+                    <Food id="2">
+                        <Cost>5.0</Cost>
+                        <Food>Neapolitan Pizza + Pepperoni + Mushroom + Olive</Food>
+                    </Food>
+                </Foods>
+            </Order>
+            <Order id="2">
+                <CustomerName>customer2</CustomerName>
+                <RestaurantName>calipso</RestaurantName>
+                <Address>adress</Address>
+                <Date>2021-45-15 09:45:41</Date>
+                <Foods>
+                    <Food id="1">
+                        <Cost>4.8</Cost>
+                        <Food>Turkey Burger + Mayonnaise + Cheese + Pickles + Tomato</Food>
+                    </Food>
+                    <Food id="2">
+                        <Cost>5.0</Cost>
+                        <Food>Neapolitan Pizza + Pepperoni + Mushroom + Olive</Food>
+                    </Food>
+                </Foods>
+            </Order>
+        </Orders>
+        <CurrentOrder>
+            <Order id="7">
+                <CustomerName>Arman Okluoğlu</CustomerName>
+                <RestaurantName>Calipso</RestaurantName>
+                <Address>Adres falan filan</Address>
+                <Date>-</Date>
+                <Foods/>
+            </Order>
+        </CurrentOrder>
+    </User>
+    <User id="4">
+        <Type>customer</Type>
+        <Name>customer2</Name>
+        <UserName>3535</UserName>
+        <Password>1234</Password>
+        <Address>gülbahçe23</Address>
+        <Orders>
+            <Order id="3">
+                <CustomerName>customer3</CustomerName>
+                <RestaurantName>calipso</RestaurantName>
+                <Address>adress</Address>
+                <Date>2021-45-15 09:45:41</Date>
+                <Foods>
+                    <Food id="1">
+                        <Cost>3.1</Cost>
+                        <Food>Big Mac Hamburger + Mayonnaise + Cheese + Pickles</Food>
+                    </Food>
+                    <Food id="2">
+                        <Cost>4.8</Cost>
+                        <Food>Californian Pizza + Pepperoni + Mushroom + Olive</Food>
+                    </Food>
+                </Foods>
+            </Order>
+            <Order id="4">
+                <CustomerName>customer4</CustomerName>
+                <RestaurantName>calipso</RestaurantName>
+                <Address>adress</Address>
+                <Date>2021-45-15 09:45:41</Date>
+                <Foods>
+                    <Food id="1">
+                        <Cost>3.1</Cost>
+                        <Food>Big Mac Hamburger + Mayonnaise + Cheese + Pickles</Food>
+                    </Food>
+                    <Food id="2">
+                        <Cost>4.8</Cost>
+                        <Food>Californian Pizza + Pepperoni + Mushroom + Olive</Food>
+                    </Food>
+                    <Food id="3">
+                        <Cost>5.0</Cost>
+                        <Food>Neapolitan Pizza + Pepperoni + Mushroom + Olive</Food>
+                    </Food>
+                </Foods>
+            </Order>
+        </Orders>
+        <CurrentOrder>
+            <Order id="6">
+                <CustomerName>customer2</CustomerName>
+                <RestaurantName>Calipso2</RestaurantName>
+                <Address>gülbahçe23</Address>
+                <Date>-</Date>
+                <Foods>
+                    <Food id="1">
+                        <Cost>4.8</Cost>
+                        <Food>Turkey Burger + Mayonnaise + Cheese + Pickles + Tomato</Food>
+                    </Food>
+                </Foods>
+            </Order>
+        </CurrentOrder>
+    </User>
+</Users>
