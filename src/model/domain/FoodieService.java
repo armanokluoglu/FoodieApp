@@ -48,12 +48,15 @@ public class FoodieService implements Observer, Subject {
 		}
 		outputData();
 	 }
-	
+
 	public void addToCart(User customer, IFood cartFood){
 	    ((Customer) customer).addItemToOrder(cartFood);
 	    outputData();
 	 }
-	
+	public void placeOrder(User customer){
+		((Customer) customer).placeOrder();
+		outputData();
+	}
 	public void changeNameOfUser(String newName, User currentUser) {
 		currentUser.setName(newName);
 		outputData();

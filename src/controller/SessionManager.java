@@ -54,7 +54,7 @@ public class SessionManager {
 
 	public void shoppingCartPage() {
 		ShoppingCartFrame shoppingCartView = new ShoppingCartFrame(fm, ((Customer) currentUser).getCurrentOrder());
-		ShoppingCartController shoppingCartController = new ShoppingCartController(shoppingCartView, this,
+		ShoppingCartController shoppingCartController = new ShoppingCartController(model,shoppingCartView, this,
 				((Customer) currentUser).getCurrentOrder());
 	}
 

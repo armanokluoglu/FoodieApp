@@ -11,11 +11,12 @@ public class ShoppingCartController implements Observer {
 	private SessionManager session;
 	private Subject subject;
 	private ShoppingCartFrame view;
-
-	public ShoppingCartController(ShoppingCartFrame view, SessionManager session, Order currentOrder) {
+	private FoodieService foodieService;
+	public ShoppingCartController(FoodieService foodieService, ShoppingCartFrame view, SessionManager session, Order currentOrder) {
 		this.session = session;
 		this.subject = currentOrder;
 		this.view = view;
+		this.foodieService = foodieService;
 
 		if (currentOrder != null && currentOrder.getItems().size() > 0)
 			currentOrder.register(this);
@@ -43,7 +44,7 @@ public class ShoppingCartController implements Observer {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			((Customer) session.getCurrentUser()).placeOrder();
+			foodieService.placeOrder(session.getCurrentUser());
 			session.userProfilePage();
 		}
 	}
