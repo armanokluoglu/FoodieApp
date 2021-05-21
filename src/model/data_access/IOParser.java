@@ -6,14 +6,16 @@ import model.utilities.ToppingPricePair;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class IOParser {
 
-    public static Node toRestaurantXMLNode(Restaurant restaurant, Document doc) {
+    protected static Node toRestaurantXMLNode(Restaurant restaurant, Document doc) {
         Element userElem = doc.createElement("User");
         //userElem.setAttribute("id", String.valueOf(user.getId()));
         userElem.setAttribute("id",String.valueOf(restaurant.getId()));
@@ -39,7 +41,7 @@ public class IOParser {
         userElem.appendChild(menuNode);
         return userElem;
     }
-    public static Node toCustomerXMLNode(Customer customer, Document doc) {
+    protected static Node toCustomerXMLNode(Customer customer, Document doc) {
         Element userElem = doc.createElement("User");
         //userElem.setAttribute("id", String.valueOf(user.getId()));
         userElem.setAttribute("id",String.valueOf(customer.getId()));
@@ -127,5 +129,96 @@ public class IOParser {
             menuElem.appendChild(itemsNode);
         }
         return menuElem;
+    }
+
+    protected static List<Menu> nodeToMenus(Node menusNode){
+        List<Menu> menuList = new ArrayList<>();
+        NodeList nList = menusNode.getChildNodes();
+        for (int temp = 0; temp < nList.getLength(); temp++) {
+            Map<FoodCostPair,List<ToppingPricePair>> menuMap = new HashMap<>();
+            Node nNode = nList.item(temp);
+            if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element eElement = (Element) nNode;
+                int id = Integer.valueOf(eElement.getAttribute("id"));
+                String menuName = eElement.getElementsByTagName("Name").item(0).getTextContent();
+
+                Node itemsNode = eElement.getElementsByTagName("Items").item(0);
+                if(itemsNode!=null)
+                    menuMap = nodeToMenuItems(menuMap,itemsNode);
+                Menu menu = new Menu(id,menuName,menuMap);
+                menuList.add(menu);
+            }
+        }
+        return menuList;
+    }
+    private static Map<FoodCostPair,List<ToppingPricePair>> nodeToMenuItems(Map<FoodCostPair,List<ToppingPricePair>> menuMap,Node menuItems){
+        NodeList nList = menuItems.getChildNodes();
+        for (int temp = 0; temp < nList.getLength(); temp++) {
+            Node nNode = nList.item(temp);
+            List<ToppingPricePair> ingredientsList = new ArrayList<>();
+
+            if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element eElement = (Element) nNode;
+                int id = Integer.valueOf(eElement.getAttribute("id"));
+                String name = eElement.getElementsByTagName("Name").item(0).getTextContent();
+                double cost = Double.valueOf(eElement.getElementsByTagName("Cost").item(0).getTextContent());
+
+                String ingredients = eElement.getElementsByTagName("Ingredients").item(0).getTextContent();
+                String[] values = ingredients.split(" ");
+                if(values.length > 0) {
+                    for (String s : values)
+                        try {
+                            String[] nameCost = s.split(":");
+                            if(nameCost.length>1)
+                                ingredientsList.add(new ToppingPricePair(Double.valueOf(nameCost[1]),nameCost[0]));
+                        } catch (NumberFormatException e) {
+                            ingredientsList = new ArrayList<>();
+                        }
+                }
+                menuMap.put(new FoodCostPair(cost,name),ingredientsList);
+            }
+        }
+        return menuMap;
+    }
+    protected static  List<Order> nodeToOrders(Node ordersNode) throws ParseException {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+        NodeList nList = ordersNode.getChildNodes();
+        List<Order> orders = new ArrayList<>();
+        for (int temp = 0; temp < nList.getLength(); temp++) {
+            Node nNode = nList.item(temp);
+            if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element eElement = (Element) nNode;
+                int id = Integer.valueOf(eElement.getAttribute("id"));
+                String customerName = eElement.getElementsByTagName("CustomerName").item(0).getTextContent();
+                String restaurantName = eElement.getElementsByTagName("RestaurantName").item(0).getTextContent();
+                String address = eElement.getElementsByTagName("Address").item(0).getTextContent();
+                String dateStr = eElement.getElementsByTagName("Date").item(0).getTextContent();
+                Date date = null;
+                if(!dateStr.equals("-"))
+                    date=dateFormat.parse(dateStr);
+                Node foodsNode = eElement.getElementsByTagName("Foods").item(0);
+                List<FoodCostPair> foodCostPairs = IOParser.nodeToFoods(foodsNode);
+                Order order = new Order(id,address,customerName,restaurantName,foodCostPairs,date);
+                orders.add(order);
+            }
+        }
+        return orders;
+    }
+    private static List<FoodCostPair> nodeToFoods(Node foodsNode){
+        List<FoodCostPair> foodCostPairs = new ArrayList<>();
+        NodeList nList = foodsNode.getChildNodes();
+        Map<String,List<String>> menuMap = new HashMap<>();
+        for (int temp = 0; temp < nList.getLength(); temp++) {
+            Node nNode = nList.item(temp);
+            if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element eElement = (Element) nNode;
+                int id = Integer.valueOf(eElement.getAttribute("id"));
+                String cost = eElement.getElementsByTagName("Cost").item(0).getTextContent();
+                String food = eElement.getElementsByTagName("Food").item(0).getTextContent();
+                FoodCostPair foodCostPair = new FoodCostPair(Double.valueOf(cost),food);
+                foodCostPairs.add(foodCostPair);
+            }
+        }
+        return foodCostPairs;
     }
 }
