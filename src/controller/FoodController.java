@@ -40,6 +40,7 @@ public class FoodController implements Observer {
 		if (isRestaurant) {
 			view.addOpenRestaurantProfileActionListener(new OpenRestaurantProfileListener());
 			view.addOpenOrderHistoryActionListener(new OpenOrderHistoryListener());
+			view.addLogoutActionListener(new LogoutListener());
 		} else {
 			view.addOpenRestaurantsActionListener(new OpenRestaurantsListener());
 			view.addOpenUserProfileActionListener(new OpenUserProfileListener());
