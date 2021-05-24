@@ -41,6 +41,13 @@ public class Restaurant extends User {
 		menu.add(newMenu);
 		setMenu(menu);
 	}
+	
+	public void placeOrder(Order order) {
+		List<Order> orders = getOrderHistory();
+		orders.add(order);
+		setOrderHistory(orders);
+		notifyObservers();
+	}
 
 	@SuppressWarnings("unused")
 	public IFood createFood(String foodName, double cost, List<ToppingPricePair> toppings) {

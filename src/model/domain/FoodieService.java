@@ -47,16 +47,22 @@ public class FoodieService implements Observer, Subject {
 			user.initializeOrder(restaurantName);
 		}
 		outputData();
-	 }
+	}
 
 	public void addToCart(User customer, IFood cartFood){
 	    ((Customer) customer).addItemToOrder(cartFood);
 	    outputData();
-	 }
-	public void placeOrder(User customer){
-		((Customer) customer).placeOrder();
+	}
+	
+	public void placeOrder(User user){
+		Customer customer = (Customer) user;
+		Order order = customer.getCurrentOrder();
+		Restaurant restaurant = (Restaurant) repo.findUserByName(order.getRestaurantName());
+		customer.placeOrder();
+		restaurant.placeOrder(order);
 		outputData();
 	}
+	
 	public void changeNameOfUser(String newName, User currentUser) {
 		currentUser.setName(newName);
 		outputData();
