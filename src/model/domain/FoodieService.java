@@ -34,8 +34,6 @@ public class FoodieService implements Observer, Subject {
 	}
 	
 	public User login(String username, String password) throws IllegalArgumentException, IllegalStateException {
-		username="calipso";
-		password="1234";
 		User user = repo.findUserByUsername(username);
 		if (!user.getPassword().equals(password)) {
 			throw new IllegalArgumentException("Invalid password.");
@@ -45,7 +43,7 @@ public class FoodieService implements Observer, Subject {
 	
 	public void initializeOrder(User customer, String restaurantName){
 		Customer user = (Customer) customer;
-		if (user.getCurrentOrder() != null && !user.getCurrentOrder().getRestaurantName().equals(restaurantName)) {
+ 		if (user.getCurrentOrder() == null || !user.getCurrentOrder().getRestaurantName().equals(restaurantName)) {
 			user.initializeOrder(restaurantName);
 		}
 		outputData();
